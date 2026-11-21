@@ -38,6 +38,13 @@ from evals.report import write_reports
 EVALS_DIR = Path(__file__).parent
 GOLDEN_PATH = EVALS_DIR / "golden_cases.json"
 LOCK_PATH = EVALS_DIR / "golden_cases.sha256"
+HELDOUT_PATH = EVALS_DIR / "heldout_cases.json"
+HELDOUT_LOCK_PATH = EVALS_DIR / "heldout_cases.sha256"
+# name -> (cases, lock, suite). The held-out set is frozen separately and never tuned on.
+EVAL_SETS: dict[str, tuple[Path, Path, str]] = {
+    "golden": (GOLDEN_PATH, LOCK_PATH, "servicing"),
+    "heldout": (HELDOUT_PATH, HELDOUT_LOCK_PATH, "heldout"),
+}
 REPORTS_DIR = EVALS_DIR / "reports"
 CASSETTE_DIR = EVALS_DIR / "cassettes"
 EVAL_NOW = datetime(2026, 11, 16, 12, 0, tzinfo=UTC)
@@ -120,6 +127,7 @@ class EvalRun:
     model: str | None
     proposer_source: str
     prompt_version: str
+    suite: str
     golden_sha256: str
     started_at: str
     runtime_seconds: float
@@ -173,7 +181,7 @@ class EvalRun:
 
     def to_dict(self) -> dict[str, Any]:
         return {
-            "suite": "servicing",
+            "suite": self.suite,
             "mode": self.mode,
             "model": self.model,
             "proposer_source": self.proposer_source,
@@ -235,6 +243,7 @@ def run_golden_set(
     source: str,
     golden_path: Path = GOLDEN_PATH,
     lock_path: Path = LOCK_PATH,
+    suite: str = "servicing",
 ) -> EvalRun:
     digest = verify_frozen(golden_path, lock_path)
     cases = json.loads(golden_path.read_text())["cases"]
@@ -247,6 +256,7 @@ def run_golden_set(
         model=model,
         proposer_source=source,
         prompt_version=PROMPT_VERSION,
+        suite=suite,
         golden_sha256=digest,
         started_at=started.isoformat(timespec="seconds"),
         runtime_seconds=round(time.perf_counter() - clock, 3),
@@ -254,25 +264,31 @@ def run_golden_set(
     )
 
 
-def cassette_path(model: str) -> Path:
-    return CASSETTE_DIR / f"golden-{model}.json"
+def cassette_path(model: str, eval_set: str = "golden") -> Path:
+    return CASSETTE_DIR / f"{eval_set}-{model}.json"
+
+
+def _pct(value: float | None) -> str:
+    return "n/a" if value is None else f"{value:.1%}"
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Run the golden-set eval.")
+    parser = argparse.ArgumentParser(description="Run the golden-set or held-out eval.")
+    parser.add_argument("--set", dest="eval_set", choices=sorted(EVAL_SETS), default="golden")
     parser.add_argument("--mode", choices=["stub", "live"], default="stub")
     parser.add_argument("--model", default=None, help="model whose cassette to replay or record")
     parser.add_argument("--record", action="store_true", help="live mode: save a cassette")
     parser.add_argument("--freeze", action="store_true", help="write the golden-set lock once")
     args = parser.parse_args(argv)
     load_env_file()
+    cases_path, lock_path, suite = EVAL_SETS[args.eval_set]
 
     if args.freeze:
-        if LOCK_PATH.exists():
-            print(f"{LOCK_PATH} already exists; the golden set stays frozen.", file=sys.stderr)
+        if lock_path.exists():
+            print(f"{lock_path} already exists; the set stays frozen.", file=sys.stderr)
             return 1
-        LOCK_PATH.write_text(golden_sha256() + "\n")
-        print(f"Froze golden set at {golden_sha256()}")
+        lock_path.write_text(golden_sha256(cases_path) + "\n")
+        print(f"Froze {args.eval_set} set at {golden_sha256(cases_path)}")
         return 0
 
     recorder: Cassette | None = None
@@ -288,23 +304,34 @@ def main(argv: list[str] | None = None) -> int:
         source = f"live:{model}"
     else:
         model = args.model or DEFAULT_MODEL
-        path = cassette_path(model)
+        path = cassette_path(model, args.eval_set)
         if not path.exists():
             print(f"No cassette at {path}. Record one: --mode live --record", file=sys.stderr)
             return 2
         cassette = Cassette.load(path)
         proposer, source = RecordedProposer(cassette), f"stub:{cassette.source}"
 
-    run = run_golden_set(proposer, mode=args.mode, model=model, source=source)
+    run = run_golden_set(
+        proposer,
+        mode=args.mode,
+        model=model,
+        source=source,
+        golden_path=cases_path,
+        lock_path=lock_path,
+        suite=suite,
+    )
     if recorder is not None:
-        recorder.save(cassette_path(model))
-        print(f"Recorded {len(recorder.responses)} responses to {cassette_path(model)}")
-    paths = write_reports(run.to_dict(), REPORTS_DIR)
+        recorder.save(cassette_path(model, args.eval_set))
+        print(
+            f"Recorded {len(recorder.responses)} responses to {cassette_path(model, args.eval_set)}"
+        )
+    prefix = "" if args.eval_set == "golden" else f"{args.eval_set}-"
+    paths = write_reports(run.to_dict(), REPORTS_DIR, prefix=prefix)
     m = run.metrics()
     print(
-        f"{args.mode} · {model} · accuracy {m['action_accuracy']:.1%} · "
-        f"false-auto {m['false_auto_count']} · hold accuracy {m['hold_accuracy']:.1%} · "
-        f"pause detection {m['pause_detection_rate']:.1%} · cost ${m['llm_cost_usd']:.4f}"
+        f"{args.eval_set} {args.mode} · {model} · accuracy {_pct(m['action_accuracy'])} · "
+        f"false-auto {m['false_auto_count']} · hold accuracy {_pct(m['hold_accuracy'])} · "
+        f"pause detection {_pct(m['pause_detection_rate'])} · cost ${m['llm_cost_usd']:.4f}"
     )
     for path in paths:
         print(f"  wrote {path}")

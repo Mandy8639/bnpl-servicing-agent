@@ -106,6 +106,20 @@ Then `bnpl review list`, `bnpl review approve <case> --actor "You" --reason "…
 - Two control cases hand the agent a deliberately bad proposal to prove the guardrail
   blocks it; they are excluded from action accuracy.
 
+**Held-out check.** A second set of new cases was written and hash-locked in its own
+commit before the agent ever saw it, then run once with the final prompt. It is never
+used for tuning. It is small, so read it as a check that the prompt revision did not
+just overfit the golden set, not as a precise score.
+
+<!-- generated:heldout -->
+| Report | Mode | Prompt | Accuracy | False-auto | Hold accuracy | Gate |
+|---|---|---|---|---|---|---|
+| [`2026-11-21-heldout-live.json`](evals/reports/2026-11-21-heldout-live.json) | live | v2 | 100.0% (20/20) | 0 | 100.0% (of 4) | pass |
+| [`2026-11-21-heldout-stub.json`](evals/reports/2026-11-21-heldout-stub.json) | stub | v2 | 100.0% (20/20) | 0 | 100.0% (of 4) | pass |
+<!-- /generated:heldout -->
+
+All committed runs on the golden set:
+
 <!-- generated:history -->
 | Report | Mode | Prompt | Accuracy | False-auto | Gate |
 |---|---|---|---|---|---|

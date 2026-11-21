@@ -166,3 +166,55 @@ def test_readme_numbers_match_the_committed_reports() -> None:
     from evals.readme import main as readme
 
     assert readme(["--check"]) == 0, "run `python -m evals.readme` to regenerate README blocks"
+
+
+# --- the held-out set -----------------------------------------------------------------
+
+
+def test_heldout_set_is_frozen_and_separate_from_the_golden_set() -> None:
+    from evals.run_evals import HELDOUT_LOCK_PATH, HELDOUT_PATH
+
+    assert verify_frozen(HELDOUT_PATH, HELDOUT_LOCK_PATH) == HELDOUT_LOCK_PATH.read_text().strip()
+    heldout = json.loads(HELDOUT_PATH.read_text())["cases"]
+    assert len(heldout) == 20
+    assert Counter(c["category"] for c in heldout) == {
+        "nudge": 5,
+        "offer_plan": 4,
+        "escalate": 4,
+        "ambiguous": 4,
+        "no_action": 3,
+    }
+    golden_merchants = {c["merchant"]["name"] for c in GOLDEN}
+    assert not golden_merchants & {c["merchant"]["name"] for c in heldout}
+    golden_texts = {m["text"] for c in GOLDEN for m in c["case"]["comms_history"]}
+    inbound = [
+        m["text"]
+        for c in heldout
+        for m in c["case"]["comms_history"]
+        if m["direction"] == "inbound"
+    ]
+    assert not golden_texts & set(inbound)
+
+
+def test_heldout_recording_replays_for_zero_dollars_and_passes_the_gate() -> None:
+    from bnpl.proposers import Cassette, RecordedProposer
+    from evals.run_evals import HELDOUT_LOCK_PATH, HELDOUT_PATH, cassette_path
+
+    cassette = Cassette.load(cassette_path("claude-haiku-5-5", "heldout"))
+    m = run_golden_set(
+        RecordedProposer(cassette),
+        mode="stub",
+        model="claude-haiku-5-5",
+        source="stub",
+        golden_path=HELDOUT_PATH,
+        lock_path=HELDOUT_LOCK_PATH,
+        suite="heldout",
+    ).metrics()
+    assert m["llm_cost_usd"] == 0.0
+    assert m["false_auto_count"] == 0
+
+
+def test_heldout_reports_never_feed_the_headline_numbers() -> None:
+    from evals.readme import numbers_block
+
+    assert "heldout" not in numbers_block()

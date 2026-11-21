@@ -191,3 +191,7 @@ Recorded so a reader can tell the spec from what shipped.
   `bnpl/mcp_server.py` so `bnpl mcp` can run it. The MCP SDK in use is 2.x.
 - **Demo data.** A live recording of the model's proposals for every ledger case lets
   `bnpl run` replay a real model's decisions for $0.
+- **A held-out set was added after the build.** The spec's golden set became in-sample
+  once the prompt was revised against it, so a second, smaller set of new cases was
+  written and hash-locked in its own commit before its first run. It ran once, with the
+  final prompt, and is never used for tuning.

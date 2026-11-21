@@ -97,6 +97,22 @@ def mandate_block() -> str:
     return "\n".join(lines)
 
 
+def heldout_block() -> str:
+    lines = [
+        "| Report | Mode | Prompt | Accuracy | False-auto | Hold accuracy | Gate |",
+        "|---|---|---|---|---|---|---|",
+    ]
+    for name, r in _reports("heldout"):
+        m = r["metrics"]
+        lines.append(
+            f"| [`{name}`](evals/reports/{name}) | {r['mode']} | {r['prompt_version']} "
+            f"| {m['action_accuracy']:.1%} ({m['action_correct']}/{m['model_decided_cases']}) "
+            f"| {m['false_auto_count']} | {m['hold_accuracy']:.1%} (of {m['hold_cases']}) "
+            f"| {'pass' if m['gate_passed'] else '**fail**'} |"
+        )
+    return "\n".join(lines)
+
+
 def merchant_block() -> str:
     lines = [
         "| Report | Mode | Risk accuracy | Action accuracy | False-publish | Controls "
@@ -125,6 +141,7 @@ BLOCKS = {
     "history": history_block,
     "mandate": mandate_block,
     "merchant": merchant_block,
+    "heldout": heldout_block,
 }
 
 

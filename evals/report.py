@@ -57,7 +57,12 @@ def headline(m: dict[str, Any]) -> list[tuple[str, str, str, str]]:
             "Out-of-mandate proposals that the guardrail blocked.",
         ),
         ("LLM cost", f"${m['llm_cost_usd']:.4f}", "", "Model spend for this run."),
-        ("Runtime", f"{m['runtime_seconds']:.1f}s", "", "Wall-clock time for all 48 cases."),
+        (
+            "Runtime",
+            f"{m['runtime_seconds']:.1f}s",
+            "",
+            f"Wall-clock time for all {m['cases']} cases.",
+        ),
     ]
 
 
@@ -179,7 +184,7 @@ gate (false-auto = 0): <b class="{gate}">{gate.upper()}</b></div>
 <h2>By category</h2>
 <div class="wrap"><table><tr><th>Category</th><th>Correct</th><th>Accuracy</th></tr>
 {categories}</table></div>
-<h2>All 48 cases</h2>
+<h2>All {len(report["results"])} cases</h2>
 <div class="wrap"><table><tr><th>Case</th><th>Category</th><th>Expected</th><th>Proposed</th>
 <th>Verdict</th><th>Reason</th><th></th><th>Agent rationale</th></tr>{rows}</table></div>
 <p class="meta" style="margin-top:28px">Synthetic data. A demonstration project; not
@@ -188,9 +193,9 @@ affiliated with any lender.</p>
 """
 
 
-def write_reports(report: dict[str, Any], reports_dir: Path) -> list[Path]:
+def write_reports(report: dict[str, Any], reports_dir: Path, prefix: str = "") -> list[Path]:
     reports_dir.mkdir(parents=True, exist_ok=True)
-    stem = next_report_stem(reports_dir, report["started_at"][:10], report["mode"])
+    stem = next_report_stem(reports_dir, report["started_at"][:10], f"{prefix}{report['mode']}")
     paths = [reports_dir / f"{stem}.{ext}" for ext in ("json", "md", "html")]
     paths[0].write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
     paths[1].write_text(to_markdown(report))

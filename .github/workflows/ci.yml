@@ -25,4 +25,5 @@ jobs:
       - name: Golden-set evals in stub mode ($0, gate must pass)
         run: |
           python -m evals.run_evals --mode stub
+          python -m evals.run_evals --set heldout --mode stub
           python -m evals.run_merchant_evals --mode stub

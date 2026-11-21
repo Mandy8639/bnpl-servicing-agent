@@ -1,0 +1,125 @@
+{
+  "source": "recorded live from claude-haiku-5-5 on 2026-11-21",
+  "responses": {
+    "case-h01": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment: $60.00 due Nov 11 is 5 days overdue, with only the first_missed flag and no hardship, dispute, or fraud signal. The prior payment on Oct 28 was made on time, so a payment reminder is the proportionate low-risk action.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-h02": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment (7 days overdue, $310.27) with only the first_missed flag and no hardship, dispute, or fraud signal; the customer's inbound email asks for the payment link, which points to a simple reminder. A payment reminder with the link is the proportionate low-risk action.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-h03": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment (due 2026-11-04, 12 days overdue, $516.84) with the first_missed flag only and no hardship, dispute, or fraud signal in the record. The prior payment landed on time, so a payment reminder is the proportionate low-risk action.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-h04": {
+      "action": "nudge",
+      "rationale": "This is the first missed instalment: the $321.39 due 2026-11-07 is unpaid after 9 days, and the only earlier issue was a late but completed September payment. No hardship, dispute, or fraud signal appears, so a payment reminder is the proportionate step.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-h05": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment (days_overdue 4, only one missed payment after a prior on-time payment) with no hardship, dispute, or fraud flag; the customer says they were abroad and will pay tonight, so a payment reminder is the proportionate action.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-h06": {
+      "action": "offer_plan",
+      "rationale": "Two instalments are missed (Sep 27 and Oct 27, $516.08 overdue for 50 days) and the customer reported on Sep 30 that shifts were cut to three days a week and asked for a smaller payment, so a longer term is what the case needs. I'm proposing a 3-month extension with no fee waiver to stay within the automatic bounds.",
+      "term_extension_months": 3,
+      "fee_waiver": false
+    },
+    "case-h07": {
+      "action": "offer_plan",
+      "rationale": "The account is current with amount_overdue 0 and both recent instalments paid on time, but the customer reports an upcoming unpaid leave and a hardship signal and asks to lower the monthly payment before falling behind. A bounded term extension is a proactive fit, so I propose a 2-month extension without a fee waiver, which keeps it within automatic bounds.",
+      "term_extension_months": 2,
+      "fee_waiver": false
+    },
+    "case-h08": {
+      "action": "offer_plan",
+      "rationale": "Three consecutive instalments are missed ($758.13 overdue, 68 days) and the customer reports hardship and asks to pay less each month, so a bounded term extension fits. The hospital reference to October is dated before that month, so the hardship claim should be verified when the plan is offered.",
+      "term_extension_months": 3,
+      "fee_waiver": false
+    },
+    "case-h09": {
+      "action": "offer_plan",
+      "rationale": "Two instalments are missed (Oct 02 and Nov 01) with 45 days overdue, and the customer's inbound SMS reports a separation and tight money, which is a hardship signal where a longer term would help. A bounded 3-month extension with no fee waiver fits the automatic plan limits.",
+      "term_extension_months": 3,
+      "fee_waiver": false
+    },
+    "case-h10": {
+      "action": "escalate_collections",
+      "rationale": "The loan is charged off with 6 consecutive missed instalments and 202 days overdue, totaling $2,903.16, which is beyond what a bounded payment plan can fix. Per the escalation criteria for charged-off trajectories, the case goes to human collections.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-h11": {
+      "action": "escalate_collections",
+      "rationale": "The case carries a fraud flag from an issuer-reported identity-theft claim on the card, with no hardship signal, and fraud review belongs to human collections. The instalment of $426.11 is 14 days overdue on a first miss, so escalation goes to the human team rather than an automated nudge or plan.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-h12": {
+      "action": "escalate_collections",
+      "rationale": "The case has a fraud flag tied to device and bank details matching three accounts closed for first-party fraud, with no hardship signal, and two instalments are missed with 45 days overdue ($1,001.42). Fraud review belongs to human collections, so this goes to escalation.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-h13": {
+      "action": "escalate_collections",
+      "rationale": "The customer has five missed instalments totalling $2,925.20 and 141 days overdue, and missed every payment on a prior 3-month extension plan, so a bounded plan of up to 3 months is unlikely to fix the arrears. Human collections should take the case.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-h14": {
+      "action": "hold_for_review",
+      "rationale": "The customer disputes the instalment, claiming Clearbrook cancelled sessions, while the merchant reports all sessions were delivered with signed records, so the account and the lender's records conflict. The $299.37 instalment is 19 days overdue with a first missed payment, so the dispute must be resolved before any collection or plan step.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-h15": {
+      "action": "hold_for_review",
+      "rationale": "The case combines a hardship signal (customer texted on 2026-10-22 that they lost their job and asked to pay less) with a fraud flag (issuer reported billing address changed twice in 48 hours), and the two signals point in different directions. Two instalments are missed, $488.12 overdue for 29 days, so the review needs a human to decide between a hardship plan and fraud escalation.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-h16": {
+      "action": "hold_for_review",
+      "rationale": "This is a first missed instalment ($265.86, 21 days overdue) with a bereavement signal: an inbound email on 2026-10-30 says the account holder, the writer's father, died last month. The writer's authority over the account is unverified, so a nudge or plan offer could be wrong and the case needs human review.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-h17": {
+      "action": "hold_for_review",
+      "rationale": "The customer reports a duplicate $300.00 charge on Nov 10 with a bank statement attached, but the settlement check found only one capture for that instalment. The customer's account and the lender's records disagree, so this goes to review rather than a side being picked.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-h18": {
+      "action": "no_action",
+      "rationale": "The payment of $266.67 due Nov 06 was received Nov 09, and the record shows amount_overdue 0.0 and days_overdue 0, so nothing is overdue and the case is resolved as a false alarm.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-h19": {
+      "action": "no_action",
+      "rationale": "Settlement shows a single $200.00 capture on Nov 11, with the second line a pre-authorisation released Nov 13, and the customer confirms the duplicate is gone; nothing is overdue (amount_overdue 0, days_overdue 0, loan current).",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-h20": {
+      "action": "no_action",
+      "rationale": "The case was opened by a processor retry error, and the records show the Nov 13 instalment of $250 was paid on its due date with nothing overdue (amount_overdue 0, days_overdue 0), so this is a false alarm with a logged reason.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    }
+  }
+}
