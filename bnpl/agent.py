@@ -30,7 +30,7 @@ from typing import TypedDict
 
 from langgraph.graph import END, START, StateGraph
 
-from bnpl.config import db_path
+from bnpl.config import db_path, load_env_file
 from bnpl.controls import PauseState, pause_state, recent_agent_decisions
 from bnpl.governed import Case, GovernedLedger, Payment, utc_now
 from bnpl.guardrail import (
@@ -50,6 +50,7 @@ from bnpl.proposers import (
 )
 
 SAMPLE_CASSETTE = Path("cassettes/ledger-sample.json")
+DEMO_CASSETTE = Path("cassettes/ledger-live.json")
 
 log = logging.getLogger("bnpl.agent")
 
@@ -295,22 +296,62 @@ def _print_summary(summary: RunSummary) -> None:
     print(f"\n{len(summary.outcomes)} case(s) · LLM cost ${summary.cost_usd:.2f}")
 
 
+def open_case_ids(ledger: GovernedLedger, candidates: list[str]) -> list[str]:
+    """The candidates that have no decision yet: the queue never re-works a decided case."""
+    decided = {d.case_id for d in ledger.decisions()}
+    return [case_id for case_id in candidates if case_id not in decided]
+
+
+def default_cassette() -> Path:
+    """The recorded live run over the whole ledger if present, else the 5-case sample."""
+    return DEMO_CASSETTE if DEMO_CASSETTE.exists() else SAMPLE_CASSETTE
+
+
+def record_proposals(ledger: GovernedLedger, proposer: Proposer, case_ids: list[str]) -> float:
+    """Ask the proposer about each case without acting. Returns the spend in USD."""
+    cost = 0.0
+    for case_id in case_ids:
+        case = ledger.case(case_id)
+        if case is None:
+            raise LookupError(f"unknown case {case_id}")
+        cost += proposer.propose(case, ledger.payments(case.loan_id)).cost_usd
+    return cost
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run the servicing agent over ledger cases.")
     parser.add_argument("--db", type=Path, default=db_path())
     parser.add_argument("--mode", choices=["stub", "live"], default="stub")
-    parser.add_argument("--cassette", type=Path, default=SAMPLE_CASSETTE)
+    parser.add_argument("--cassette", type=Path, default=None)
+    parser.add_argument(
+        "--record-to", type=Path, default=None, help="live: propose only, save a cassette here"
+    )
     parser.add_argument("cases", nargs="*", help="case ids (default: every case in the cassette)")
     args = parser.parse_args(argv)
+    load_env_file()
     logging.basicConfig(level=logging.WARNING, format="%(message)s")
 
-    cassette = Cassette.load(args.cassette)
+    if args.record_to:
+        recorder = Cassette(source="")
+        live = live_proposer_from_env(record_to=recorder)
+        recorder.source = f"recorded live from {live.model} on {datetime.now(UTC).date()}"
+        with GovernedLedger(args.db) as ledger:
+            case_ids = args.cases or [c.case_id for c in ledger.cases()]
+            cost = record_proposals(ledger, live, case_ids)
+        recorder.save(args.record_to)
+        print(f"Recorded {len(recorder.responses)} proposals to {args.record_to} · ${cost:.4f}")
+        return 0
+
+    cassette = Cassette.load(args.cassette or default_cassette())
     if args.mode == "stub":
         proposer: Proposer = RecordedProposer(cassette)
     else:
         proposer = live_proposer_from_env()
-    case_ids = args.cases or sorted(cassette.responses)
     with GovernedLedger(args.db, clock=lambda: datetime.now(UTC)) as ledger:
+        case_ids = args.cases or open_case_ids(ledger, sorted(cassette.responses))
+        if not case_ids:
+            print("No open cases left to work.")
+            return 0
         summary = ServicingAgent(ledger, proposer).run_queue(case_ids)
     _print_summary(summary)
     return 0

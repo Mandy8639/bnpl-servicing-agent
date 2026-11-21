@@ -78,5 +78,3 @@ MANDATE: tuple[ActionRule, ...] = (
         "Auto, with a logged reason, only when nothing is overdue on the record; otherwise HOLD",
     ),
 )
-
-RISK_BY_ACTION: dict[Action, Risk] = {rule.action: rule.risk for rule in MANDATE}

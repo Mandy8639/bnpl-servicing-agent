@@ -151,15 +151,17 @@ def test_a_paused_agent_works_no_cases_until_a_human_clears_it(ledger_path: Path
         assert agent.run_case("case-0093").status is Status.EXECUTED
 
 
-def test_a_breach_while_already_paused_is_inventoried_without_a_second_pause(
+def test_rerunning_the_digest_while_paused_alerts_without_flooding_the_inventory(
     ledger_path: Path,
 ) -> None:
+    alerts = []
     with open_ledger(ledger_path) as ledger:
         force_auto_rate_breach(ledger)
         run_controls(ledger)
-        run_controls(ledger)
+        run_controls(ledger, on_alert=alerts.append)
         kinds = [e.kind for e in ledger.exceptions()]
-    assert kinds == ["BREACH", "PAUSE", "BREACH"]
+    assert kinds == ["BREACH", "PAUSE"]
+    assert [a.reason_code for a in alerts] == [ReasonCode.AUTO_RATE_BREACH]
 
 
 # --- CLI ----------------------------------------------------------------------------
@@ -303,3 +305,23 @@ def test_api_exposes_the_mandate(client: TestClient) -> None:
         "no_action",
     ]
     assert body["thresholds"]["max_auto_action_rate"] == 0.8
+
+
+def test_dashboard_page_and_assets_are_served(client: TestClient) -> None:
+    page = client.get("/")
+    assert page.status_code == 200 and "Servicing desk" in page.text
+    for asset in ("/static/app.js", "/static/app.css"):
+        assert client.get(asset).status_code == 200
+
+
+def test_dashboard_reads_numbers_from_the_api_not_the_page(client: TestClient) -> None:
+    script = client.get("/static/app.js").text
+    for endpoint in ("/evals/latest", "/controls/digest", "/reviews", "/cases", "/audit"):
+        assert f'"{endpoint}"' in script
+    assert "97.8" not in script and "97.8" not in client.get("/").text
+
+
+def test_api_serves_the_audit_log_in_order(client: TestClient) -> None:
+    audit = client.get("/audit").json()
+    assert [d["id"] for d in audit] == sorted(d["id"] for d in audit)
+    assert len(audit) == 5

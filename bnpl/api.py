@@ -12,6 +12,8 @@ from pathlib import Path
 from typing import Any, Literal
 
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from bnpl.config import db_path
@@ -30,12 +32,21 @@ from bnpl.mandate import (
 from bnpl.review import REJECTED_PREFIX, ReviewError, approve, held_cases, reject
 
 REPORTS_DIR = Path(__file__).resolve().parents[1] / "evals" / "reports"
+DASHBOARD_DIR = Path(__file__).resolve().parent / "dashboard"
 
 app = FastAPI(
     title="bnpl-servicing-agent",
     description="A bounded BNPL servicing agent on synthetic data, with a human at the gate.",
     version="0.1.0",
 )
+
+
+app.mount("/static", StaticFiles(directory=DASHBOARD_DIR), name="static")
+
+
+@app.get("/", include_in_schema=False)
+def dashboard() -> FileResponse:
+    return FileResponse(DASHBOARD_DIR / "index.html")
 
 
 @contextmanager
@@ -136,6 +147,13 @@ def review_case(case_id: str, body: ReviewRequest) -> dict[str, Any]:
             "status": case_status(opened.decisions(case_id)),
             "decision": asdict(decision),
         }
+
+
+@app.get("/audit")
+def audit_log() -> list[dict[str, Any]]:
+    """The append-only audit log, oldest first."""
+    with ledger() as opened:
+        return [asdict(d) for d in opened.decisions()]
 
 
 @app.get("/reviews")

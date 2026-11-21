@@ -160,3 +160,9 @@ def test_committed_cassette_replays_for_zero_dollars_and_passes_the_gate() -> No
     ).metrics()
     assert m["llm_cost_usd"] == 0.0
     assert m["false_auto_count"] == 0
+
+
+def test_readme_numbers_match_the_committed_reports() -> None:
+    from evals.readme import main as readme
+
+    assert readme(["--check"]) == 0, "run `python -m evals.readme` to regenerate README blocks"

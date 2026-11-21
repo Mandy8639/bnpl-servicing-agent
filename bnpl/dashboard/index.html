@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Servicing desk · bnpl-servicing-agent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top-row">
+      <div class="brand">
+        <span class="brand-name">Servicing desk</span>
+        <span class="brand-sub">bnpl-servicing-agent · synthetic data</span>
+      </div>
+      <div class="status" id="status" aria-live="polite"></div>
+    </div>
+    <div class="wrap">
+      <div class="tape" id="tape" role="img" aria-label="Audit log, one mark per decision"></div>
+      <div class="tape-legend" id="tape-legend"></div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="desk">
+      <div class="panel queue">
+        <div class="panel-head">
+          <h2>Waiting on you</h2>
+          <span class="count" id="queue-count"></span>
+        </div>
+        <label class="actor">
+          <span>Reviewing as</span>
+          <input id="actor" type="text" autocomplete="name" placeholder="Your name">
+        </label>
+        <div id="queue"></div>
+      </div>
+
+      <aside class="panel controls">
+        <div class="panel-head">
+          <h2>Controls</h2>
+          <span class="count" id="window-note"></span>
+        </div>
+        <div id="rails"></div>
+        <h3>Exception inventory</h3>
+        <div id="inventory"></div>
+      </aside>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Eval: golden set</h2>
+        <span class="count" id="eval-source"></span>
+      </div>
+      <div class="tiles" id="eval-tiles"></div>
+      <div class="split">
+        <div>
+          <h3>By category</h3>
+          <div class="table-scroll"><table class="grid" id="eval-categories"></table></div>
+        </div>
+        <div>
+          <h3>Every committed run</h3>
+          <div class="table-scroll"><table class="grid" id="eval-history"></table></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Cases</h2>
+        <div class="chips" id="filters" role="group" aria-label="Filter cases by status"></div>
+      </div>
+      <div class="table-scroll">
+        <table class="grid cases" id="cases"></table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head"><h2>Mandate</h2><span class="count" id="owner"></span></div>
+      <div class="table-scroll"><table class="grid" id="mandate"></table></div>
+    </section>
+
+    <footer class="foot">
+      A demonstration on synthetic data. Not affiliated with, endorsed by, or built for any
+      lender. Eval numbers are read from committed reports in <code>evals/reports</code>.
+    </footer>
+  </main>
+
+  <dialog id="detail" aria-labelledby="detail-title">
+    <div class="detail-head">
+      <h2 id="detail-title"></h2>
+      <button type="button" class="ghost" id="detail-close">Close</button>
+    </div>
+    <div id="detail-body"></div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

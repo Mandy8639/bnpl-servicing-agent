@@ -225,3 +225,12 @@ def test_clearing_a_pause_needs_a_named_human_and_reason(ledger_path: Path) -> N
 def test_unknown_case_is_an_error(ledger_path: Path, alerts) -> None:
     with pytest.raises(LookupError):
         agent_for(ledger_path, ScriptedProposer(raw("nudge")), alerts).run_case("case-9999")
+
+
+def test_a_queue_run_never_reworks_a_decided_case(ledger_path: Path, alerts) -> None:
+    from bnpl.agent import open_case_ids
+
+    case_ids = reviewable_case_ids(ledger_path, 3)
+    agent_for(ledger_path, ScriptedProposer(raw("nudge")), alerts).run_case(case_ids[0])
+    with ledger_at(ledger_path) as ledger:
+        assert open_case_ids(ledger, case_ids) == case_ids[1:]

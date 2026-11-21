@@ -62,7 +62,7 @@ def check(proposal: Proposal, **ctx_changes: object) -> GuardrailResult:
 def test_nudge_runs_unattended_within_the_daily_cap() -> None:
     result = check(propose(Action.NUDGE))
     assert (result.verdict, result.reason_code) == (Verdict.ALLOW, ReasonCode.NUDGE_WITHIN_CAP)
-    assert not result.needs_human
+    assert result.escalation_owner is None
 
 
 def test_second_nudge_to_the_same_customer_on_the_same_day_holds() -> None:

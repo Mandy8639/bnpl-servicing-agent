@@ -165,16 +165,34 @@ def build_digest(ledger: GovernedLedger) -> Digest:
     )
 
 
+def _breaches_logged_this_pause(exceptions: list[ExceptionRecord]) -> set[str]:
+    """Reason codes already inventoried as BREACH (or as the PAUSE) since the open pause began."""
+    logged: set[str] = set()
+    for record in exceptions:
+        if record.kind == "CLEAR":
+            logged = set()
+        elif record.kind in ("BREACH", "PAUSE"):
+            logged.add(record.reason_code)
+    return logged
+
+
 def run_controls(
     ledger: GovernedLedger, on_alert: Callable[[PauseCondition], None] = lambda _: None
 ) -> Digest:
-    """Compute the digest; on any breach, alert, inventory it, and pause the agent."""
+    """Compute the digest; on any breach, alert, inventory it, and pause the agent.
+
+    While a pause is open, a breach that is already inventoried still alerts but is
+    not logged again, so re-running the digest does not flood the inventory.
+    """
     digest = build_digest(ledger)
+    already_logged = _breaches_logged_this_pause(ledger.exceptions()) if digest.paused else set()
     for breach in digest.breaches:
         on_alert(breach)
-        ledger.record_exception(kind="BREACH", reason_code=breach.reason_code, detail=breach.detail)
+        if breach.reason_code not in already_logged:
+            ledger.record_exception(
+                kind="BREACH", reason_code=breach.reason_code, detail=breach.detail
+            )
     if digest.breaches and not digest.paused:
         first = digest.breaches[0]
         ledger.record_exception(kind="PAUSE", reason_code=first.reason_code, detail=first.detail)
-        return build_digest(ledger)
-    return digest
+    return build_digest(ledger) if digest.breaches else digest

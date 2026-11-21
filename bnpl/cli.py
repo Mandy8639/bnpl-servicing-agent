@@ -61,7 +61,8 @@ def cmd_review_decide(ledger: GovernedLedger, args: argparse.Namespace) -> int:
         print(f"error: {exc}", file=sys.stderr)
         return 1
     outcome = f"executed {decision.final_action}" if decision.final_action else "nothing executed"
-    print(f"{args.case_id}: {args.decision}d by {decision.actor}; {outcome}.")
+    past = {"approve": "approved", "reject": "rejected"}[args.decision]
+    print(f"{args.case_id}: {past} by {decision.actor}; {outcome}.")
     return 0
 
 

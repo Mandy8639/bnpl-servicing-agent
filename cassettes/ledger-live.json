@@ -1,0 +1,563 @@
+{
+  "source": "recorded live from claude-haiku-5-5 on 2026-11-21",
+  "responses": {
+    "case-0001": {
+      "action": "escalate_collections",
+      "rationale": "The loan is already charged off with six consecutive missed instalments totaling $2,598.84 and 178 days overdue, which is beyond what a bounded payment plan can fix. Repeat-missed flag and charged-off status point to handing the case to human collections.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0002": {
+      "action": "escalate_collections",
+      "rationale": "The loan is charged off with six consecutive missed instalments and 164 days overdue on $2,327.58, which is beyond what a bounded payment plan can fix. Repeat-missed flag and no customer contact since the voicemail point to human collections handling.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0003": {
+      "action": "escalate_collections",
+      "rationale": "The loan is charged off with 6 consecutive missed instalments totaling $2,179.68 and 159 days overdue, beyond what a bounded payment plan can fix, and there has been no customer contact since the July voicemail. Handing the case to human collections is the appropriate action.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0004": {
+      "action": "escalate_collections",
+      "rationale": "The loan is charged off with 141 days overdue, $1,730.20 outstanding across five missed instalments, and a repeat_missed flag, which is beyond what a bounded payment plan can fix. Per the escalation criteria for charged-off arrears, this goes to human collections.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0005": {
+      "action": "escalate_collections",
+      "rationale": "The loan is charged off with five consecutive missed instalments totaling $369.30 and 140 days overdue, beyond what a bounded payment plan can fix. Escalation to human collections is the appropriate route.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0006": {
+      "action": "escalate_collections",
+      "rationale": "The loan is charged off with five consecutive missed instalments totaling $6,246.50 and 128 days overdue, with a repeat_missed flag and no customer contact since August, which is beyond what a bounded payment plan can fix. Handing the case to human collections is the appropriate action.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0007": {
+      "action": "escalate_collections",
+      "rationale": "The loan is charged off with five consecutive missed instalments totaling $1,211.55 over 127 days overdue, and there has been no customer contact since the August voicemail, which is beyond what a bounded payment plan can fix. Handing the case to human collections is the appropriate step.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0008": {
+      "action": "escalate_collections",
+      "rationale": "The loan is already charged off with four consecutive missed instalments (117 days overdue, $1,130.12 owed) and a repeat_missed flag, which is arrears beyond what a bounded payment plan can fix. Hand it to human collections for the servicing lead.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0009": {
+      "action": "escalate_collections",
+      "rationale": "The loan is charged off with four consecutive missed instalments totalling $1,607.84 and 116 days overdue, which is beyond what a bounded payment plan can fix. Escalating to human collections is the appropriate route.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0010": {
+      "action": "escalate_collections",
+      "rationale": "The loan is charged off with 4 consecutive missed instalments totaling $991.12 overdue for 109 days, which is beyond what a bounded payment plan can fix. Per the high-risk criteria, this goes to human collections and is held for the servicing lead.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0011": {
+      "action": "escalate_collections",
+      "rationale": "The loan is already charged off, with four consecutive missed instalments (910.56 overdue) and 106 days past due, which is beyond what a bounded payment plan can fix. Risk flag is repeat_missed with no contact since the voicemail, so it goes to human collections.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0012": {
+      "action": "escalate_collections",
+      "rationale": "The loan is charged off with 101 days overdue, three missed instalments totalling $647.94, and a repeat_missed flag, which is beyond what a bounded payment plan can fix. Handing the case to human collections is the appropriate action.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0013": {
+      "action": "escalate_collections",
+      "rationale": "The loan is charged off with four consecutive missed instalments totalling $1,433.04 over 102 days overdue, which is beyond what a bounded payment plan can fix. Repeat missed payments and no customer contact since August make this a High-risk case for human collections.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0014": {
+      "action": "escalate_collections",
+      "rationale": "The loan is charged off with four consecutive missed instalments totalling $1,448.56 overdue for 94 days and no customer contact, which is beyond what a bounded payment plan can fix. Escalation to human collections is the appropriate action under the High risk category.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0015": {
+      "action": "offer_plan",
+      "rationale": "Three consecutive instalments are missed (2026-09-02, 10-02, 11-02), totalling $850.32 overdue at 75 days, with a repeat_missed flag and no hardship, dispute, or fraud signal. A bounded 3-month term extension without a fee waiver is the smallest plan that fits the repeat-missed pattern and stays within automatic limits.",
+      "term_extension_months": 3,
+      "fee_waiver": false
+    },
+    "case-0016": {
+      "action": "offer_plan",
+      "rationale": "Three consecutive instalments are missed ($1,613.85 overdue, 74 days past the first due date) with a repeat_missed flag and no fraud or charge-off signal, so a bounded term extension may fix the arrears. I propose a 2-month extension without a fee waiver to stay within automatic bounds.",
+      "term_extension_months": 2,
+      "fee_waiver": false
+    },
+    "case-0017": {
+      "action": "offer_plan",
+      "rationale": "Two consecutive instalments (Sep 04 and Oct 04, $261.60 each) are missed, totalling $523.20 overdue 73 days, with a repeat_missed flag, so a repeated-miss pattern calls for a revised plan rather than a single nudge. Because the case is repeat-missed and a longer term could help, a bounded 3-month extension with no fee waiver is proposed, though the guardrail may route it to human review given the 73-day arrears.",
+      "term_extension_months": 3,
+      "fee_waiver": false
+    },
+    "case-0018": {
+      "action": "escalate_collections",
+      "rationale": "The loan is charged off with four consecutive missed instalments totalling $487.44 overdue for 69 days, and there has been no customer contact since the 2026-09-26 voicemail. Arrears and a charged-off trajectory are beyond what a bounded plan can fix, so this goes to human collections.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0019": {
+      "action": "offer_plan",
+      "rationale": "Three consecutive instalments are missed (Sep 12, Oct 12, Nov 12), totalling $504.93 overdue, with a repeat_missed flag and no hardship, dispute, or fraud signal in the record. A bounded 3-month term extension without a fee waiver is the smallest plan that addresses repeated missed payments while staying inside automatic limits.",
+      "term_extension_months": 3,
+      "fee_waiver": false
+    },
+    "case-0020": {
+      "action": "offer_plan",
+      "rationale": "Two consecutive instalments (Sep 17 and Oct 17, $1,617.98 total) are missed and 60 days overdue, with a repeat_missed flag and no hardship, dispute, or fraud signal, so a bounded plan is the right fit. A 2-month term extension with no fee waiver stays within automatic bounds.",
+      "term_extension_months": 2,
+      "fee_waiver": false
+    },
+    "case-0021": {
+      "action": "offer_plan",
+      "rationale": "Two consecutive instalments (Sep 23 and Oct 23, $222.87 each) are missed with a repeat_missed flag and $445.74 overdue at 54 days, so a repeat pattern calls for a revised plan rather than a single reminder. No hardship, dispute, or fraud signal is recorded, and the loan is not charged off, so a bounded 2-month term extension without fee waiver fits within automatic limits.",
+      "term_extension_months": 2,
+      "fee_waiver": false
+    },
+    "case-0022": {
+      "action": "hold_for_review",
+      "rationale": "An open merchant dispute is active, and the merchant approved a partial refund whose amount is not yet confirmed, so the true amount owed is uncertain. With two missed instalments, 51 days overdue, and the customer's claim that the install failed inspection, the case is too ambiguous for an automated action.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0023": {
+      "action": "offer_plan",
+      "rationale": "Two consecutive instalments (Sep 29 and Oct 29, totalling $2,507.28) are missed with 48 days overdue and a repeat_missed flag, so a single reminder is insufficient and a bounded longer term may help. Proposing a 3-month extension with no fee waiver keeps it within automatic bounds.",
+      "term_extension_months": 3,
+      "fee_waiver": false
+    },
+    "case-0024": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment ($788.76 due 2026-09-29, unpaid, 48 days overdue) with only the first_missed flag and no hardship, dispute, or fraud signal in the record. A payment reminder is the lowest-risk proportionate step.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0025": {
+      "action": "offer_plan",
+      "rationale": "Two missed instalments (Sep 30 and Oct 31, $1,161.96 overdue, 47 days) combined with a hardship signal from the customer saying they are between jobs make a longer term useful. A 2-month extension with a fee waiver is within the automatic bounds for a revised plan.",
+      "term_extension_months": 2,
+      "fee_waiver": true
+    },
+    "case-0026": {
+      "action": "no_action",
+      "rationale": "The 2026-10-03 instalment of $1,173.21 was paid late on 2026-10-09, the system confirms receipt, and the November payment is also paid. Amount overdue is $0.00 with 0 days overdue and the loan is current, so the case is resolved.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0027": {
+      "action": "offer_plan",
+      "rationale": "Case-0027 has a repeat_missed flag with two consecutive missed instalments (Oct 3 and Nov 3, $331.56 each, $663.12 overdue, 44 days overdue), so a single reminder is insufficient and a longer term may help. A bounded 3-month extension with no fee waiver stays within automatic plan limits.",
+      "term_extension_months": 3,
+      "fee_waiver": false
+    },
+    "case-0028": {
+      "action": "no_action",
+      "rationale": "The $99.30 instalment due 2026-10-05 was paid late on 2026-10-14, and the system log confirms receipt; the loan is current with amount_overdue of 0.0 and days_overdue of 0. This is a first missed payment that has since cleared, so no action is needed.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0029": {
+      "action": "offer_plan",
+      "rationale": "Two consecutive instalments (Oct 6 and Nov 6, $175.63 each) are missed, 41 days overdue, with a repeat_missed flag, so a single reminder is insufficient and a bounded term extension may help the customer recover. No hardship or fraud signal is recorded, so a modest 2-month extension with no fee waiver stays within automatic bounds.",
+      "term_extension_months": 2,
+      "fee_waiver": false
+    },
+    "case-0030": {
+      "action": "hold_for_review",
+      "rationale": "The case is an open merchant dispute with a partial refund approved but amount not yet confirmed, and two instalments ($217.91 each) are missed with 40 days overdue. The dispute may change the amount owed, so the evidence is unresolved and an offer_plan or collections step cannot be sized reliably until the refund amount is confirmed.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0031": {
+      "action": "offer_plan",
+      "rationale": "Two consecutive instalments (Oct 07 and Nov 07, $1,118.33 each, $2,236.66 overdue at 40 days) are missed with a repeat_missed flag, so a bounded revised plan is the proportionate response rather than a single reminder. A 3-month extension with no fee waiver stays within automatic bounds.",
+      "term_extension_months": 3,
+      "fee_waiver": false
+    },
+    "case-0032": {
+      "action": "offer_plan",
+      "rationale": "Two consecutive instalments are missed ($822.74 overdue, 41 days) and the record carries a repeat_missed flag, so a bounded plan is more appropriate than a single reminder. A 2-month extension stays within the automatic limits and does not require a fee waiver.",
+      "term_extension_months": 2,
+      "fee_waiver": false
+    },
+    "case-0033": {
+      "action": "no_action",
+      "rationale": "The 2026-10-09 instalment of $227.21 was paid late on 2026-10-17, and the internal system log confirms receipt. The loan is current with amount_overdue of 0.0 and days_overdue of 0, so nothing is outstanding.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0034": {
+      "action": "hold_for_review",
+      "rationale": "The customer disputes the Sunvale Solar install as failed inspection, while the merchant record says goods/services were delivered as agreed, so the account and the lender's records conflict. Two instalments are missed (38 days overdue, $1,122.34), so this needs human review rather than a nudge or plan.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0035": {
+      "action": "offer_plan",
+      "rationale": "Two consecutive missed instalments (Oct 13 and Nov 13, $1,083.56 overdue, 34 days) plus a customer-reported layoff and hardship request on Oct 16 point to a longer term as the fitting remedy. A bounded 3-month extension with no fee waiver stays within automatic limits.",
+      "term_extension_months": 3,
+      "fee_waiver": false
+    },
+    "case-0036": {
+      "action": "offer_plan",
+      "rationale": "Case-0036 has two consecutive missed instalments (Oct 14 and Nov 14, $2,397.52 overdue, 33 days) and a repeat_missed flag, so a single reminder is insufficient. A bounded term extension of 2 months with no fee waiver is within automatic limits and may help the customer recover.",
+      "term_extension_months": 2,
+      "fee_waiver": false
+    },
+    "case-0037": {
+      "action": "offer_plan",
+      "rationale": "Case-0037 has repeat missed payments (Oct 12 and Nov 12 instalments of $907.50 each, $1,815 overdue, 35 days overdue) with the repeat_missed flag, so a single nudge is insufficient and a bounded longer term may help. Proposing a 2-month extension with no fee waiver keeps it within automatic bounds.",
+      "term_extension_months": 2,
+      "fee_waiver": false
+    },
+    "case-0038": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment of $1,704.51 (due 2026-10-16, 31 days overdue) with only a first_missed flag and no hardship, dispute, or fraud signal. A payment reminder is the proportionate low-risk response.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0039": {
+      "action": "hold_for_review",
+      "rationale": "The customer reports a duplicate $119.81 charge on Oct 15, and the settlement check confirms two captures for the same instalment, so the refund is owed but no action in this set processes it. Nothing is overdue (0 days, status current), so the case goes to the review queue for the refund to be handled.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0040": {
+      "action": "no_action",
+      "rationale": "The customer's account of two $500.72 captures on Oct 17 matches the internal settlement check, and nothing is overdue (amount_overdue 0, days_overdue 0, status current), so no credit action applies. The duplicate capture still needs a refund routed through the payments team, which is outside this action set.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0041": {
+      "action": "hold_for_review",
+      "rationale": "This is an open merchant dispute: the customer reports a cancelled flight and a refund, and the merchant approved only a partial refund whose amount is not yet confirmed, so the correct overdue amount is unsettled. With the dispute unresolved and the record ambiguous, I am abstaining rather than nudging or offering a plan.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0042": {
+      "action": "no_action",
+      "rationale": "The Oct 18 instalment of $329.12 was paid late on Oct 30, and the internal system log confirms receipt; amount_overdue is 0.0, days_overdue is 0, and the loan status is current, so nothing remains overdue.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0043": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment (risk flag first_missed) of $640.56, 29 days overdue, with no hardship, dispute, or fraud signal in the record. A payment reminder is the lowest-risk proportionate step, and no prior nudge has been sent beyond the general reminder and collection-failure email.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0044": {
+      "action": "offer_plan",
+      "rationale": "The record shows a first missed instalment of $166.66 now 30 days overdue, plus a customer SMS reporting being between jobs and asking for more time, which is a hardship signal where a longer term can help. No fraud or charge-off flags, so a bounded plan with a 2-month extension and no fee waiver fits within automatic limits.",
+      "term_extension_months": 2,
+      "fee_waiver": false
+    },
+    "case-0045": {
+      "action": "offer_plan",
+      "rationale": "The customer's inbound SMS on 2026-10-21 cites medical bills and asks for more time to pay, which is a hardship signal, and the Oct 17 instalment of $759.47 is 30 days overdue. A two-month term extension within automatic bounds should lower the instalment enough to help, with no fee waiver.",
+      "term_extension_months": 2,
+      "fee_waiver": false
+    },
+    "case-0046": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment (282.64 due 2026-10-18, 29 days overdue) with only the first_missed flag and no hardship, dispute, or fraud signal in the record. A payment reminder is the lowest-risk proportionate step.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0047": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment (Oct 18, $1,364.72, 29 days overdue) with the only risk flag being first_missed and no hardship, dispute, or fraud signal in the record. A payment reminder is the low-risk action that fits, and the customer has paid on time previously (Sep 17).",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0048": {
+      "action": "hold_for_review",
+      "rationale": "The case is a merchant dispute over an unfinished job, with a fraud flag on the card and an overdue $339.44 instalment 28 days past due, so the signals point in different directions and the merchant has not yet answered. Because the fraud flag and dispute need human judgment rather than a bounded plan or escalation, this goes to review.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0049": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment (Oct 22, $140.24, 25 days overdue) with no hardship, dispute, or fraud flag, and the prior payment on Sep 22 was made on time. A payment reminder is the proportionate low-risk response.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0050": {
+      "action": "offer_plan",
+      "rationale": "The customer missed one instalment (first_missed) and reports being between jobs, a hardship signal, and the lender's record matches that with $768.96 overdue for 27 days on a 6-month loan. A 2-month term extension without a fee waiver stays within automatic bounds and can lower the instalment during the gap.",
+      "term_extension_months": 2,
+      "fee_waiver": false
+    },
+    "case-0051": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment (risk flag first_missed) of $456.79, 26 days overdue, with no hardship, dispute, or fraud signal in the record. Per the playbook, a first missed payment warrants a payment reminder rather than a revised plan or collections escalation.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0052": {
+      "action": "hold_for_review",
+      "rationale": "The case combines a hardship signal (hours cut), a fraud flag on the card, and an open merchant dispute over a failed install, so the signals point in different directions and the evidence is unresolved. Routing to review rather than choosing between offer_plan and escalate_collections.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0053": {
+      "action": "offer_plan",
+      "rationale": "The customer reports a hardship signal (can manage only about half the instalment) on a first missed payment of $123.77, 23 days overdue, with no fraud or dispute flag. A bounded term extension with a fee waiver addresses the reduced affordability, so I propose a 3-month extension with fee waiver, subject to guardrail review since fee waiver is outside automatic bounds.",
+      "term_extension_months": 3,
+      "fee_waiver": true
+    },
+    "case-0054": {
+      "action": "no_action",
+      "rationale": "The loan is current with $0.00 overdue and 0 days overdue, and the internal record confirms the $320.41 instalment due Oct 25 was received on Nov 4, so nothing is outstanding. Two consecutive late payments are noted, but the case is resolved on the current record.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0055": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment (flag first_missed) of $256.86, 21 days overdue, with no hardship, dispute, or fraud signal in the record. A payment reminder is the lowest-risk proportionate action.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0056": {
+      "action": "hold_for_review",
+      "rationale": "The record shows days_overdue of 21, but the missed instalment was due 2026-10-26 and the case opened 2026-10-27, which implies about one day overdue, so the lender's own dates conflict. Since the overdue age is unclear, I am abstaining rather than choosing between a nudge and a plan.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0057": {
+      "action": "no_action",
+      "rationale": "The system record shows the $302.36 instalment due Oct 26 was received Oct 29, and the case shows amount_overdue 0, days_overdue 0 and status current, so nothing is outstanding. The first_missed flag is stale because the payment has landed.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0058": {
+      "action": "hold_for_review",
+      "rationale": "The customer reports two $923.21 charges on Oct 25, but the settlement check found only one capture and flags a possible pending hold, so the customer's account and the lender's records disagree. Nothing is overdue (amount_overdue 0.0, days_overdue 0), but the duplicate-charge question needs human review before any resolution.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0059": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment (flag first_missed) 21 days overdue on the $1,190.33 payment due 2026-10-26, with no hardship, dispute, or fraud signal in the record. A payment reminder is the proportionate low-risk step.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0060": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment of $119.05, 19 days overdue, with only the first_missed flag and no hardship, dispute, or fraud signal in the record. A payment reminder is the lowest-risk proportionate action.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0061": {
+      "action": "hold_for_review",
+      "rationale": "The customer reports two $416.83 charges on Oct 28, but the internal settlement check found only one capture and flags a possible pending hold. The customer's account and the lender's records disagree, and nothing is overdue (amount_overdue 0, days_overdue 0), so this goes to human review rather than a side being picked.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0062": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment (Oct 31, $2,285.21, 16 days overdue) with the only risk flag being first_missed and no hardship, dispute, or fraud signal in the record. The prior payment on Sep 30 was made on time, so a payment reminder is the proportionate low-risk action.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0063": {
+      "action": "offer_plan",
+      "rationale": "The record shows a first missed instalment of $386.64 (due Oct 29, 18 days overdue) with a customer hardship signal (medical bills, asking for more time while stating intent to pay). A bounded term extension would help, so I propose offer_plan with a 2-month extension and a fee waiver.",
+      "term_extension_months": 2,
+      "fee_waiver": true
+    },
+    "case-0064": {
+      "action": "offer_plan",
+      "rationale": "The customer has a hardship signal (asked to reduce the monthly amount, can manage about half) on a first missed instalment of $175.43, 18 days overdue, with no fraud or dispute flag. A longer term with a lower instalment fits the case, so I propose a 3-month extension without a fee waiver, which stays within the automatic bounds.",
+      "term_extension_months": 3,
+      "fee_waiver": false
+    },
+    "case-0065": {
+      "action": "hold_for_review",
+      "rationale": "The customer says the order was returned on Aug 11 and has a return receipt, but the merchant reports no refund and goods delivered as agreed, so the customer's account and the lender's records conflict. A hardship signal (hours cut) is also present, and the dispute is open, so this goes to review rather than a plan or nudge.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0066": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment (16 days overdue, $232.60 due Oct 31) with only a first_missed flag and no hardship, dispute, or fraud signal in the record. A payment reminder is the proportionate low-risk action.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0067": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment: $599.45 is 14 days overdue and the only risk flag is first_missed, with no hardship, dispute, or fraud signal. A payment reminder is the proportionate low-risk response.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0068": {
+      "action": "hold_for_review",
+      "rationale": "The customer reports two $1,004.64 charges on Nov 03, and the internal settlement check confirms two captures for the same instalment, so the overcharge is real but unresolved. Nothing is overdue, but the refund is outside this action set, so a human should process it rather than closing the case as no_action.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0069": {
+      "action": "offer_plan",
+      "rationale": "The customer reports being between jobs (hardship signal) after a first missed instalment of $100.89, 14 days overdue, with no fraud or dispute flags. A bounded term extension of up to 3 months with a fee waiver can address the cash-flow gap, so a revised plan fits better than a simple reminder.",
+      "term_extension_months": 2,
+      "fee_waiver": true
+    },
+    "case-0070": {
+      "action": "hold_for_review",
+      "rationale": "The customer disputes the payment because the merchant hasn't finished the work, and also asks for a lower instalment (hardship signal), while the merchant has approved a partial refund whose amount is not yet confirmed. The dispute, the refund and the hardship request point in different directions and the refund amount is missing, so the case is ambiguous and needs human review.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0071": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment (Nov 2 due, 14 days overdue, $466.45) with only a first_missed flag and no hardship, dispute, or fraud signal, and the prior payment on Oct 2 was made on time. A payment reminder is the proportionate low-risk action.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0072": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment (442.78 due 2026-11-04, 12 days overdue) with only the first_missed flag and no hardship, dispute, or fraud signal on record. A payment reminder is the proportionate low-risk response.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0073": {
+      "action": "hold_for_review",
+      "rationale": "Nothing is overdue (case-0073 shows the 2026-11-05 instalment paid on 2026-11-02), but the customer reports reduced hours and asks to split the next payment, while an internal note says the linked balance has been below the instalment for 2 cycles. That conflicts with the on-time payment record, so a human should review before any plan is offered.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0074": {
+      "action": "offer_plan",
+      "rationale": "The customer reports being between jobs and asks to push back the due date, and the linked balance has been below the instalment for 2 cycles, though payments to date were on time and nothing is overdue. A bounded term extension of 2 months with no fee waiver addresses the hardship and the upcoming 2026-11-17 instalment within automatic limits.",
+      "term_extension_months": 2,
+      "fee_waiver": false
+    },
+    "case-0075": {
+      "action": "nudge",
+      "rationale": "The $365.98 instalment due 2026-11-05 is missed and 11 days overdue, and the risk flag is first_missed with no hardship, dispute, or fraud signal. The October payment was late but paid, so a payment reminder fits this first missed instalment.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0076": {
+      "action": "offer_plan",
+      "rationale": "The first missed instalment ($283.33, 11 days overdue) comes with a hardship signal from the customer's inbound message saying they are between jobs and asking for more time, so a bounded plan with a short term extension fits better than a reminder. Term extension stays within the automatic bounds with no fee waiver.",
+      "term_extension_months": 2,
+      "fee_waiver": false
+    },
+    "case-0077": {
+      "action": "offer_plan",
+      "rationale": "The customer reports being between jobs and asked to push the date back, and the linked balance has been below the instalment for 2 cycles, so a longer term would help. The 2026-11-08 instalment was paid early on 2026-11-05, with nothing overdue, and the next payment of 658.73 is scheduled for 2026-12-08.",
+      "term_extension_months": 2,
+      "fee_waiver": false
+    },
+    "case-0078": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment (Nov 07, $976.86, 9 days overdue) with only a prior late payment in October and no hardship, dispute, or fraud signal on the record. A payment reminder is the lowest-risk proportionate step.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0079": {
+      "action": "offer_plan",
+      "rationale": "The customer reports a hardship (medical bills) and says they want to keep paying, with a linked-account balance below the instalment for 2 cycles, while the loan is current with nothing overdue and no fraud flag. A bounded term extension of 2 months with no fee waiver fits the hardship signal and stays within automatic bounds.",
+      "term_extension_months": 2,
+      "fee_waiver": false
+    },
+    "case-0080": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment: $162.96 was due 2026-11-07 and is 9 days overdue, with no hardship, dispute, or fraud signal, only the first_missed flag. A payment reminder is the proportionate low-risk step.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0081": {
+      "action": "offer_plan",
+      "rationale": "This is a first missed instalment ($588.24, 10 days overdue) with a hardship signal: the customer texted that medical bills landed at the same time and they need more time. A bounded term extension of 2 months with no fee waiver fits the automatic limits and addresses the hardship without escalation.",
+      "term_extension_months": 2,
+      "fee_waiver": false
+    },
+    "case-0082": {
+      "action": "offer_plan",
+      "rationale": "Case shows a hardship signal with the customer saying they can only manage about half the instalment, and the linked balance has been below the instalment for 2 cycles, though the account is current with nothing overdue (amount_overdue 0, days_overdue 0). A bounded term extension of 3 months with no fee waiver lowers the instalment within automatic limits and fits the hardship.",
+      "term_extension_months": 3,
+      "fee_waiver": false
+    },
+    "case-0083": {
+      "action": "offer_plan",
+      "rationale": "The customer reports a hardship signal and asks to lower the monthly amount, saying they can manage about half of the $1,272.38 instalment, which is 7 days overdue on a first missed payment. A 3-month term extension without a fee waiver stays within automatic bounds and addresses the stated affordability problem.",
+      "term_extension_months": 3,
+      "fee_waiver": false
+    },
+    "case-0084": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment (flagged first_missed) 7 days past due on $178.08, with no hardship, dispute, or fraud signal in the record. A payment reminder is the lowest-risk proportionate action.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0085": {
+      "action": "offer_plan",
+      "rationale": "The customer reports reduced hours (hardship signal) and asks to split the payment; the loan is current with 0 days overdue and both prior instalments paid on time, but the linked balance has been below the instalment for 2 cycles, so a bounded term extension of 2 months with no fee waiver is proposed to ease the next instalments.",
+      "term_extension_months": 2,
+      "fee_waiver": false
+    },
+    "case-0086": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment (flag first_missed) 7 days overdue on a $107.53 payment, with no hardship, dispute, or fraud signal in the record. A payment reminder is the proportionate low-risk step.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0087": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment (Nov 09, $878.48, 7 days overdue) with only a first_missed flag and no hardship, dispute, or fraud signal, and the prior payment on Oct 09 was made on time. A payment reminder is the proportionate low-risk action.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0088": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment (8 days overdue, $283.13) with only a first_missed flag and no hardship, dispute, or fraud signal in the record. A payment reminder is the proportionate low-risk response.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0089": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment (due 2026-11-11, 5 days overdue, $1,244.34) with only the first_missed flag and no hardship, dispute, or fraud signal in the record. The prior payment landed on time, so a standard payment reminder is the proportionate low-risk action.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0090": {
+      "action": "offer_plan",
+      "rationale": "The customer reports they can manage only about half the instalment, and the system notes the linked balance has been below the instalment for 2 cycles, after a late-paid October instalment, so a longer term would help. Nothing is currently overdue, and a 3-month extension with no fee waiver stays within automatic bounds.",
+      "term_extension_months": 3,
+      "fee_waiver": false
+    },
+    "case-0091": {
+      "action": "offer_plan",
+      "rationale": "The customer reports being between jobs and asks to push the payment date back, and the system flags a linked balance below the instalment for 2 cycles, while the loan is current with nothing overdue. A bounded 2-month term extension without a fee waiver fits the hardship signal and stays within automatic limits.",
+      "term_extension_months": 2,
+      "fee_waiver": false
+    },
+    "case-0092": {
+      "action": "offer_plan",
+      "rationale": "This is a first missed instalment (2 days overdue, $583.01) with a hardship signal, since the customer says they can manage about half the amount, and a longer term would help. Term extension and fee waiver stay within automatic bounds, so I propose a 2-month extension with no fee waiver.",
+      "term_extension_months": 2,
+      "fee_waiver": false
+    },
+    "case-0093": {
+      "action": "nudge",
+      "rationale": "This is a first missed instalment: $164.14 is 3 days overdue on case-0093 with only the first_missed flag and no hardship, dispute, or fraud signal. A payment reminder is the proportionate low-risk response.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    }
+  }
+}

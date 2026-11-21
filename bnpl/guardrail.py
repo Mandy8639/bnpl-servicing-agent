@@ -125,10 +125,6 @@ class GuardrailResult:
     escalation_owner: str | None = None
     decide_by: datetime | None = None
 
-    @property
-    def needs_human(self) -> bool:
-        return self.verdict is Verdict.HOLD
-
 
 def _rate(decisions: Sequence[RecentDecision], hit: str) -> float:
     if hit == "auto":
