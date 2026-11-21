@@ -10,8 +10,9 @@ const pct = (v) => (v === null || v === undefined ? "—" : `${(v * 100).toFixed
 const money = (v) => `$${Number(v).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 const when = (iso) => (iso ? iso.replace("T", " ").slice(0, 16) + " UTC" : "—");
 const label = (s) => String(s).replaceAll("_", " ");
+const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
 
-const state = { filter: "all", cases: [], actions: [], minSample: 0 };
+const state = { filter: "all", cases: [], actions: [], minSample: 0, merchants: {}, held: [], showAllReports: false, reportGates: [] };
 
 async function api(path, options) {
   const response = await fetch(path, options);
@@ -262,11 +263,144 @@ async function openCase(caseId) {
   $("detail").showModal();
 }
 
+// --- Merchant reports --------------------------------------------------------------
+
+const REPORT_SCALE = 50; // the delinquency bar runs from 0% to 50%
+
+function renderMerchants(merchants) {
+  $("merchants").innerHTML = merchants
+    .map((m) => {
+      const pctWidth = Math.min(100, (m.delinquency_rate_pct / REPORT_SCALE) * 100);
+      const report = m.latest_report;
+      const status = report ? report.status : "no report";
+      return `
+      <button type="button" class="merchant" data-merchant="${esc(m.merchant_id)}">
+        <div class="merchant-top"><span class="merchant-name">${esc(m.merchant)}</span>
+          <span class="badge ${esc(m.policy_risk)}">${esc(m.policy_risk)}</span></div>
+        <div class="merchant-meta">${esc(m.sector)} · ${m.loans_total} loans</div>
+        <div class="delinq" role="meter" aria-label="Delinquency ${m.delinquency_rate_pct}%" aria-valuenow="${m.delinquency_rate_pct}" aria-valuemax="${REPORT_SCALE}">
+          <div class="fill ${esc(m.policy_risk)}" style="width:${pctWidth}%"></div>
+          ${state.reportGates.map((g) => `<div class="gate" style="left:${(g / REPORT_SCALE) * 100}%"></div>`).join("")}
+        </div>
+        <div class="merchant-meta">${m.delinquency_rate_pct}% late · ${m.plan_uptake_pct}% on plans · ${plural(m.open_disputes, "dispute")} · ${plural(m.fraud_flags, "fraud flag")}</div>
+        <div><span class="badge ${esc(status)}">${esc(status)}</span>${m.under_review ? ` <span class="badge HOLD">under review</span>` : ""}</div>
+      </button>`;
+    })
+    .join("");
+  state.merchants = Object.fromEntries(merchants.map((m) => [m.merchant_id, m]));
+}
+
+function reportCard(r, withForm) {
+  return `
+    <article class="held" data-report="${r.id}">
+      <div class="held-top">
+        <span class="mono">${esc(r.merchant_id)} · report ${r.id}</span>
+        ${r.decide_by ? `<span class="held-due">decide by ${esc(when(r.decide_by))}</span>` : ""}
+      </div>
+      <div class="held-action">${esc(label(r.recommended_action))}</div>
+      <div class="held-meta">${esc(r.risk_level)} risk · <span class="badge ${esc(r.verdict)}">${esc(r.reason_code)}</span>
+        ${r.escalation_owner ? ` · owner: ${esc(r.escalation_owner)}` : ""}</div>
+      <p class="held-why">${esc(r.headline)}</p>
+      <ul class="findings">${(r.findings || []).map((f) => `<li>${esc(f)}</li>`).join("")}</ul>
+      ${withForm ? `<form>
+        <textarea name="reason" placeholder="Your reason (saved with the report)" aria-label="Reason"></textarea>
+        <div class="row">
+          <button type="submit" class="btn primary" value="approve">Publish</button>
+          <button type="submit" class="btn" value="reject">Reject</button>
+        </div>
+      </form>` : `<p class="held-meta">${esc(r.status)} by ${esc(r.actor)}${r.reason ? `: ${esc(r.reason)}` : ""}</p>`}
+    </article>`;
+}
+
+function renderReportQueue(held) {
+  $("report-count").textContent = `${held.length} held`;
+  if (!held.length) {
+    $("report-queue").innerHTML = `<p class="empty-state">No merchant reports are waiting. Draft them with <code>bnpl report draft --all</code>.</p>`;
+    return;
+  }
+  const shown = state.showAllReports ? held : held.slice(0, 3);
+  $("report-queue").innerHTML =
+    shown.map((r) => reportCard(r, true)).join("") +
+    (held.length > shown.length
+      ? `<button type="button" class="ghost more" id="more-reports">Show all ${held.length} held reports</button>`
+      : "");
+}
+
+async function submitReportReview(event) {
+  event.preventDefault();
+  const form = event.target;
+  const card = form.closest("[data-report]");
+  const decision = event.submitter?.value || "approve";
+  const actor = $("actor").value.trim();
+  const reason = form.reason.value.trim();
+  if (!actor) { $("actor").focus(); toast("Add your name under “Reviewing as” first."); return; }
+  if (!reason) { form.reason.focus(); toast("Add a reason. It is saved with the report."); return; }
+  form.querySelectorAll("button").forEach((b) => (b.disabled = true));
+  try {
+    await api(`/merchant-reports/${card.dataset.report}/review`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ decision, actor, reason }),
+    });
+    toast(`Report ${card.dataset.report} ${decision === "approve" ? "published" : "rejected"} by ${actor}.`);
+    await refreshMerchants();
+  } catch (error) {
+    toast(`Not saved: ${error.message}`);
+    form.querySelectorAll("button").forEach((b) => (b.disabled = false));
+  }
+}
+
+function openMerchant(merchantId) {
+  const m = state.merchants[merchantId];
+  if (!m) return;
+  $("detail-title").textContent = `${m.merchant} · weekly report`;
+  const facts = [
+    ["Loans", m.loans_total], ["Overdue", m.loans_overdue], ["Charged off", m.loans_charged_off],
+    ["On plans", m.loans_in_plan], ["Delinquency", `${m.delinquency_rate_pct}%`],
+    ["Plan uptake", `${m.plan_uptake_pct}%`], ["Amount overdue", money(m.amount_overdue_usd)],
+    ["Open disputes", m.open_disputes], ["Fraud flags", m.fraud_flags],
+    ["Held exceptions", m.exceptions_held],
+  ];
+  $("detail-body").innerHTML = `
+    <p class="held-meta">${esc(m.sector)} · policy band <span class="badge ${esc(m.policy_risk)}">${esc(m.policy_risk)}</span>
+      → ${esc(label(m.policy_action))}</p>
+    <h3>Governed metrics</h3>
+    <div class="kv">${facts.map(([k, v]) => `<span>${k}</span><span>${esc(v)}</span>`).join("")}</div>
+    <h3>Latest report</h3>
+    ${m.latest_report ? reportCard(m.latest_report, false) : `<p class="empty-state">No report yet.</p>`}`;
+  $("detail").showModal();
+}
+
+function renderMerchantEval({ file, metrics: m }) {
+  const tiles = [
+    ["Risk accuracy", pct(m.risk_accuracy), `${m.model_written_reports} model reports`],
+    ["Action accuracy", pct(m.action_accuracy), `${m.action_correct}/${m.model_written_reports}`],
+    ["False-publish", String(m.false_publish_count), "must be 0", m.false_publish_count === 0 ? "gate" : "gate fail"],
+    ["Controls caught", pct(m.control_detection_rate), `${m.control_cases} control cases`],
+  ];
+  $("merchant-eval").innerHTML = tiles
+    .map(([k, v, n, cls]) => `<div class="tile ${cls || ""}"><div class="k">${k}</div><div class="v">${esc(v)}</div><div class="n">${esc(n)}</div></div>`)
+    .join("");
+  $("merchant-eval-source").innerHTML = `From <code>${esc(file)}</code>, stub mode.`;
+}
+
+async function refreshMerchants() {
+  const [merchants, held] = await Promise.all([api("/merchants"), api("/merchant-reports?status=held")]);
+  state.held = held;
+  renderMerchants(merchants);
+  renderReportQueue(held);
+}
+
 // --- Mandate -----------------------------------------------------------------------
 
 function renderMandate(mandate) {
   state.actions = mandate.actions.map((a) => a.action);
   state.minSample = mandate.thresholds.control_min_sample;
+  const { watch_delinquency_pct: watch, escalation_delinquency_pct: escalate } = mandate.report_thresholds;
+  state.reportGates = [watch, escalate];
+  $("report-lede").textContent =
+    "A second agent writes each merchant's weekly portfolio summary from governed metrics. " +
+    `Bars show delinquency against the ${watch}% watch line and the ${escalate}% escalation line.`;
   $("owner").textContent = `escalation owner: ${mandate.escalation_owner} · ${mandate.review_sla_hours}h to decide`;
   $("mandate").innerHTML =
     `<thead><tr><th>Action</th><th>Meaning</th><th>Risk</th><th>Handling</th></tr></thead><tbody>` +
@@ -309,12 +443,28 @@ async function init() {
     if (row && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); openCase(row.dataset.open); }
   });
   $("detail-close").addEventListener("click", () => $("detail").close());
+  $("report-queue").addEventListener("submit", submitReportReview);
+  $("report-queue").addEventListener("click", (e) => {
+    if (e.target.id !== "more-reports") return;
+    state.showAllReports = true;
+    renderReportQueue(state.held);
+  });
+  $("merchants").addEventListener("click", (e) => {
+    const card = e.target.closest("[data-merchant]");
+    if (card) openMerchant(card.dataset.merchant);
+  });
 
   try {
     renderMandate(await api("/mandate"));
     await refreshLedger();
   } catch (error) {
     $("queue").innerHTML = `<p class="empty-state">Could not load the ledger: ${esc(error.message)}</p>`;
+  }
+  try {
+    await refreshMerchants();
+    renderMerchantEval(await api("/evals/merchant/latest"));
+  } catch (error) {
+    $("report-queue").innerHTML = `<p class="empty-state">Could not load merchant reports: ${esc(error.message)}</p>`;
   }
   try {
     renderEval(await api("/evals/latest"));

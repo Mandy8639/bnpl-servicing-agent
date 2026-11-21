@@ -279,3 +279,75 @@ def test_the_committed_recording_replays_for_zero_dollars_and_passes_the_gate() 
     assert m["llm_cost_usd"] == 0.0
     assert m["false_publish_count"] == 0
     assert m["control_detection_rate"] == 1.0
+
+
+# --- the dashboard API for merchant reports ------------------------------------------
+
+
+@pytest.fixture
+def reported_ledger(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    """A fresh demo ledger where every merchant has a replayed report."""
+    from bnpl.ledger.seed import seed_ledger
+
+    path = tmp_path / "ledger.db"
+    seed_ledger(path)
+    assert cli(["--db", str(path), "report", "draft", "--all", "--mode", "stub"]) == 0
+    monkeypatch.setenv("BNPL_DB_PATH", str(path))
+    return path
+
+
+@pytest.fixture
+def client(reported_ledger: Path):
+    from fastapi.testclient import TestClient
+
+    from bnpl.api import app
+
+    return TestClient(app)
+
+
+def test_api_lists_every_merchant_with_metrics_band_and_latest_report(client) -> None:
+    merchants = client.get("/merchants").json()
+    assert len(merchants) == 12
+    first = merchants[0]
+    assert {"delinquency_rate_pct", "plan_uptake_pct", "policy_risk", "policy_action"} <= set(first)
+    assert {m["latest_report"]["status"] for m in merchants} <= {"held", "blocked"}
+
+
+def test_replayed_reports_whose_numbers_no_longer_match_are_blocked(client) -> None:
+    """The demo reports were recorded on the fully worked ledger. Replayed on a fresh one,
+    any report that quotes a count that has since changed is no longer grounded."""
+    reports = [m["latest_report"] for m in client.get("/merchants").json()]
+    blocked = [r for r in reports if r["status"] == "blocked"]
+    assert blocked and all(r["reason_code"] == "UNSUPPORTED_NUMBER" for r in blocked)
+    held = [r for r in reports if r["status"] == "held"]
+    assert held and all(r["escalation_owner"] == "portfolio risk lead" for r in held)
+
+
+def test_api_held_report_queue_and_review(client) -> None:
+    held = client.get("/merchant-reports", params={"status": "held"}).json()
+    assert held and held[0]["headline"] and held[0]["findings"]
+    url = f"/merchant-reports/{held[0]['id']}/review"
+    assert client.post(url, json={"decision": "approve", "reason": "x"}).status_code == 422
+    agent = {"decision": "approve", "actor": "agent", "reason": "x"}
+    assert client.post(url, json=agent).status_code == 400
+    ok = client.post(
+        url, json={"decision": "approve", "actor": "Priya", "reason": "Risk to review."}
+    )
+    assert ok.status_code == 200 and ok.json()["status"] == "approved"
+    assert len(client.get("/merchant-reports", params={"status": "held"}).json()) == len(held) - 1
+    assert client.post(url, json={**agent, "actor": "Priya"}).status_code == 400
+
+
+def test_api_serves_the_merchant_eval_and_report_thresholds(client) -> None:
+    body = client.get("/evals/merchant/latest").json()
+    assert body["file"].startswith("2026-11-21-merchant-stub")
+    assert body["metrics"]["false_publish_count"] == 0
+    thresholds = client.get("/mandate").json()["report_thresholds"]
+    assert thresholds == {"watch_delinquency_pct": 5.0, "escalation_delinquency_pct": 20.0}
+
+
+def test_dashboard_reads_merchant_numbers_from_the_api(client) -> None:
+    page, script = client.get("/").text, client.get("/static/app.js").text
+    for endpoint in ("/merchants", "/merchant-reports?status=held", "/evals/merchant/latest"):
+        assert endpoint in script
+    assert "20%" not in page and "reportGates: []" in script

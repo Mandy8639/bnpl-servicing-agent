@@ -16,6 +16,7 @@ import json
 import os
 import sys
 from collections.abc import Callable
+from datetime import date
 from pathlib import Path
 
 from bnpl.config import db_path, load_env_file
@@ -151,26 +152,46 @@ def cmd_report_draft(ledger: GovernedLedger, args: argparse.Namespace) -> int:
     from bnpl.merchant_report import ClaudeReportWriter, RecordedReportWriter, run_report
     from bnpl.proposers import DEFAULT_MODEL, Cassette, SpendLedger
 
+    recorder: Cassette | None = None
     if args.mode == "live":
         cap = float(os.environ.get("BNPL_DAILY_SPEND_CAP_USD", "1.00"))
         spend = SpendLedger(Path(os.environ.get("BNPL_SPEND_PATH", "data/spend.json")), cap)
-        writer = ClaudeReportWriter(spend=spend, model=os.environ.get("BNPL_MODEL", DEFAULT_MODEL))
+        model = os.environ.get("BNPL_MODEL", DEFAULT_MODEL)
+        if args.record_to:
+            recorder = Cassette(source=f"recorded live from {model} on {date.today()}")
+        writer = ClaudeReportWriter(spend=spend, model=model, record_to=recorder)
     else:
         if not args.cassette.exists():
             print(f"No recorded reports at {args.cassette}; use --mode live.", file=sys.stderr)
             return 2
         writer = RecordedReportWriter(Cassette.load(args.cassette))
-    try:
-        outcome = run_report(ledger, args.merchant_id, writer)
-    except LookupError as exc:
-        print(f"error: {exc}", file=sys.stderr)
-        return 1
-    print(f"{outcome.merchant_id}: {outcome.status.upper()} · {outcome.verdict.reason_code}")
-    print(f"  {outcome.draft.headline}")
-    for finding in outcome.draft.findings:
-        print(f"  - {finding}")
-    print(f"  risk {outcome.draft.risk_level} · action {outcome.draft.recommended_action}")
-    print(_color(f"  {outcome.verdict.detail} · cost ${outcome.cost_usd:.4f}", DIM))
+
+    if args.all:
+        merchant_ids = [m.id for m in ledger.merchants()]
+    elif args.merchant_id:
+        merchant_ids = [args.merchant_id]
+    else:
+        print("error: give a merchant id or --all", file=sys.stderr)
+        return 2
+    total = 0.0
+    for merchant_id in merchant_ids:
+        try:
+            outcome = run_report(ledger, merchant_id, writer)
+        except LookupError as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return 1
+        total += outcome.cost_usd
+        print(f"{outcome.merchant_id}: {outcome.status.upper()} · {outcome.verdict.reason_code}")
+        print(f"  {outcome.draft.headline}")
+        if not args.all:
+            for finding in outcome.draft.findings:
+                print(f"  - {finding}")
+            print(f"  risk {outcome.draft.risk_level} · action {outcome.draft.recommended_action}")
+            print(_color(f"  {outcome.verdict.detail}", DIM))
+    if recorder is not None and args.record_to:
+        recorder.save(args.record_to)
+        print(f"Recorded {len(recorder.responses)} reports to {args.record_to}")
+    print(_color(f"{len(merchant_ids)} report(s) · cost ${total:.4f}", DIM))
     return 0
 
 
@@ -262,9 +283,11 @@ def build_parser() -> argparse.ArgumentParser:
     report = sub.add_parser("report", help="merchant portfolio reports").add_subparsers(
         dest="report_command", required=True
     )
-    draft = report.add_parser("draft", help="write one merchant's weekly report")
-    draft.add_argument("merchant_id")
+    draft = report.add_parser("draft", help="write weekly merchant reports")
+    draft.add_argument("merchant_id", nargs="?")
+    draft.add_argument("--all", action="store_true", help="every merchant in the ledger")
     draft.add_argument("--mode", choices=["stub", "live"], default="live")
+    draft.add_argument("--record-to", type=Path, default=None, help="live: save the reports")
     draft.add_argument("--cassette", type=Path, default=Path("cassettes/merchant-ledger.json"))
     draft.set_defaults(func=_with_ledger(cmd_report_draft))
     report.add_parser("list", help="held reports").set_defaults(func=_with_ledger(cmd_report_list))

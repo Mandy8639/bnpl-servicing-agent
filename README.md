@@ -137,7 +137,8 @@ It blocks any report that states a number not in the metrics or the published po
 names a customer, or uses an action outside the report mandate. It holds stale data, a
 merchant under review, a risk level lower than the metrics show, and anything external
 or escalated. It has its own frozen golden set and gate: no report that must hold may
-publish (false-publish = 0).
+publish (false-publish = 0). The dashboard shows each merchant's governed metrics against the
+policy lines, and the held reports waiting to be published or rejected.
 
 <!-- generated:merchant -->
 | Report | Mode | Risk accuracy | Action accuracy | False-publish | Controls | Grounding blocks | Gate |

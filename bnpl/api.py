@@ -27,8 +27,11 @@ from bnpl.mandate import (
     MAX_AUTO_ACTION_RATE,
     MAX_CONSECUTIVE_BLOCKS,
     MAX_OFFER_PLAN_RATE,
+    REPORT_HIGH_DELINQUENCY,
+    REPORT_MEDIUM_DELINQUENCY,
     REVIEW_SLA,
 )
+from bnpl.merchant_report import decide_report, held_reports, merchant_metrics, risk_band
 from bnpl.review import ReviewError, approve, case_status, held_cases, reject
 
 REPORTS_DIR = Path(__file__).resolve().parents[1] / "evals" / "reports"
@@ -181,14 +184,20 @@ def mandate() -> dict[str, Any]:
             "control_min_sample": CONTROL_MIN_SAMPLE,
             "freshness_max_age_hours": 24,
         },
+        "report_thresholds": {
+            "watch_delinquency_pct": REPORT_MEDIUM_DELINQUENCY * 100,
+            "escalation_delinquency_pct": REPORT_HIGH_DELINQUENCY * 100,
+        },
     }
 
 
-def committed_reports(reports_dir: Path = REPORTS_DIR) -> list[dict[str, Any]]:
+def committed_reports(
+    reports_dir: Path = REPORTS_DIR, suite: str = "servicing"
+) -> list[dict[str, Any]]:
     reports = []
     for path in sorted(reports_dir.glob("*.json")):
         data = json.loads(path.read_text())
-        if data.get("suite", "servicing") == "servicing":
+        if data.get("suite", "servicing") == suite:
             reports.append({"file": path.name, **data})
     return sorted(reports, key=lambda r: (r["started_at"], r["file"]))
 
@@ -215,3 +224,101 @@ def latest_eval(mode: Literal["stub", "live"] = Query("stub")) -> dict[str, Any]
             for r in reports
         ],
     }
+
+
+# --- merchant reports -------------------------------------------------------------------
+
+
+def _report_reviews(opened: GovernedLedger) -> dict[int, dict[str, Any]]:
+    """Owner and deadline for each held report, from the exception inventory."""
+    reviews: dict[int, dict[str, Any]] = {}
+    for record in opened.exceptions():
+        try:
+            detail = json.loads(record.detail)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(detail, dict) and "report_id" in detail:
+            reviews[int(detail["report_id"])] = detail
+    return reviews
+
+
+def _report_row(row: dict[str, Any], reviews: dict[int, dict[str, Any]]) -> dict[str, Any]:
+    review = reviews.get(row["id"], {})
+    return {
+        **{k: v for k, v in row.items() if k != "body"},
+        **json.loads(row["body"]),
+        "escalation_owner": review.get("escalation_owner"),
+        "decide_by": review.get("decide_by"),
+        "guardrail_detail": review.get("guardrail_detail", row["reason"]),
+    }
+
+
+@app.get("/merchants")
+def list_merchants() -> list[dict[str, Any]]:
+    """Each merchant's governed metrics, the policy's risk band, and its latest report."""
+    with ledger() as opened:
+        reports = opened.merchant_reports()
+        reviews = _report_reviews(opened)
+        latest = {r["merchant_id"]: r for r in reports}
+        rows = []
+        for merchant in opened.merchants():
+            m = merchant_metrics(opened, merchant.id)
+            if m is None:
+                continue
+            risk, action = risk_band(m)
+            report = latest.get(merchant.id)
+            rows.append(
+                {
+                    **m.payload(opened.meta("as_of") or ""),
+                    "merchant_id": merchant.id,
+                    "under_review": m.under_review,
+                    "policy_risk": risk.value,
+                    "policy_action": action.value,
+                    "latest_report": _report_row(report, reviews) if report else None,
+                }
+            )
+        return rows
+
+
+@app.get("/merchant-reports")
+def list_merchant_reports(status: str | None = None) -> list[dict[str, Any]]:
+    """Every report entry, newest first; ``status=held`` gives the reports waiting on a human."""
+    with ledger() as opened:
+        reviews = _report_reviews(opened)
+        rows = held_reports(opened) if status == "held" else opened.merchant_reports()
+        if status not in (None, "held"):
+            rows = [r for r in rows if r["status"] == status]
+        return [_report_row(r, reviews) for r in reversed(rows)]
+
+
+class ReportReviewRequest(BaseModel):
+    decision: Literal["approve", "reject"]
+    actor: str = Field(min_length=1, description="The human making the decision.")
+    reason: str = Field(min_length=1)
+
+
+@app.post("/merchant-reports/{report_id}/review")
+def review_merchant_report(report_id: int, body: ReportReviewRequest) -> dict[str, Any]:
+    with ledger() as opened:
+        try:
+            new_id = decide_report(
+                opened,
+                report_id,
+                approve=body.decision == "approve",
+                actor=body.actor,
+                reason=body.reason,
+            )
+        except ValueError as exc:
+            raise HTTPException(400, str(exc)) from exc
+        row = next(r for r in opened.merchant_reports() if r["id"] == new_id)
+        return _report_row(row, _report_reviews(opened))
+
+
+@app.get("/evals/merchant/latest")
+def latest_merchant_eval() -> dict[str, Any]:
+    """The newest committed stub report for the merchant-report agent."""
+    reports = [r for r in committed_reports(suite="merchant") if r["mode"] == "stub"]
+    if not reports:
+        raise HTTPException(404, "no committed merchant-report eval")
+    latest = reports[-1]
+    return {"file": latest["file"], "model": latest["model"], "metrics": latest["metrics"]}

@@ -1,0 +1,138 @@
+{
+  "source": "recorded live from claude-haiku-5-5 on 2026-11-20",
+  "responses": {
+    "mer-01": {
+      "headline": "Velora Air Charters shows a delinquency rate of 41.2%, which meets the escalation threshold and needs risk review.",
+      "findings": [
+        "Delinquency rate is 41.2%, at or above the 20% escalation threshold.",
+        "6 of 17 loans are overdue, with 1 loan charged off and amount overdue of $3644.26.",
+        "Plan uptake is 17.6% with 3 loans in plan, below the 25% monitoring threshold.",
+        "No fraud flags are open, and 1 dispute is open, below the threshold for merchant review."
+      ],
+      "risk_level": "high",
+      "recommended_action": "escalate_to_risk"
+    },
+    "mer-02": {
+      "headline": "Tidewell Getaways shows a delinquency rate of 28.6%, which is well above the escalation threshold, so the account needs escalation to risk.",
+      "findings": [
+        "Delinquency rate is 28.6% across 21 loans, with 5 loans overdue and 1 charged off.",
+        "Amount overdue totals $3489.41.",
+        "Plan uptake is 4.8%, and there are no open disputes or fraud flags.",
+        "Two exceptions are held and none are blocked."
+      ],
+      "risk_level": "high",
+      "recommended_action": "escalate_to_risk"
+    },
+    "mer-03": {
+      "headline": "Orrin Bay Cruises shows a delinquency rate of 44.4%, which requires escalation to risk.",
+      "findings": [
+        "Delinquency rate is 44.4% across 18 loans, with 6 loans overdue and 2 charged off.",
+        "Amount overdue totals 4387.05 USD.",
+        "Open disputes stand at 1 and fraud flags at 0, so those thresholds are not triggered.",
+        "Plan uptake is 0.0% with 0 loans in plan, and 4 exceptions are held with 0 blocked."
+      ],
+      "risk_level": "high",
+      "recommended_action": "escalate_to_risk"
+    },
+    "mer-04": {
+      "headline": "Calder Skin Clinic's delinquency rate of 25.0% is above the 20% escalation threshold, so this account goes to risk.",
+      "findings": [
+        "Delinquency rate is 25.0%, with 4 of 20 loans overdue.",
+        "Amount overdue is $4719.19, and 1 loan has been charged off.",
+        "Plan uptake is 10.0%, with 2 loans in plan.",
+        "There are no open disputes or fraud flags, and 2 exceptions are held with 0 blocked."
+      ],
+      "risk_level": "high",
+      "recommended_action": "escalate_to_risk"
+    },
+    "mer-05": {
+      "headline": "Brisa Dental Studio shows a 26.7% delinquency rate, which requires escalation to risk despite no open disputes or fraud flags.",
+      "findings": [
+        "Delinquency rate is 26.7% across 15 loans, at or above the 20% escalation threshold.",
+        "2 loans are overdue and 2 are charged off, with $2231.07 overdue in total.",
+        "Plan uptake is 13.3% with 2 loans in plan, below the 25% revised-plan monitoring threshold.",
+        "No open disputes or fraud flags are recorded, and 4 exceptions are held with 0 blocked."
+      ],
+      "risk_level": "high",
+      "recommended_action": "escalate_to_risk"
+    },
+    "mer-06": {
+      "headline": "Halvorsen Vision Care shows a 40.0% delinquency rate, which warrants escalation to risk.",
+      "findings": [
+        "Delinquency rate is 40.0% across 15 loans, at or above the 20% escalation threshold.",
+        "4 loans are overdue and 2 loans are charged off, with amount overdue of $6397.12.",
+        "Plan uptake is 6.7% with 1 loan in plan, below the 25% revised-plan threshold.",
+        "No open disputes or fraud flags; 2 exceptions are held and 0 are blocked."
+      ],
+      "risk_level": "high",
+      "recommended_action": "escalate_to_risk"
+    },
+    "mer-07": {
+      "headline": "Marlow & Finch Jewelers shows a 30.4% delinquency rate, which meets the threshold for escalation to risk.",
+      "findings": [
+        "Delinquency rate is 30.4%, above the 20% escalation threshold.",
+        "6 of 23 loans are overdue, with 1 loan charged off.",
+        "Amount overdue is $5575.84.",
+        "Plan uptake is 17.4% and open disputes and fraud flags are both 0.",
+        "4 exceptions are held and 0 are blocked."
+      ],
+      "risk_level": "high",
+      "recommended_action": "escalate_to_risk"
+    },
+    "mer-08": {
+      "headline": "Quillon Audio's delinquency rate of 25.0% crosses the 20% escalation threshold, so the account goes to risk.",
+      "findings": [
+        "Delinquency rate is 25.0%, at or above the 20% escalation threshold.",
+        "5 of 28 loans are overdue, and 2 loans are charged off.",
+        "Amount overdue is $5661.94.",
+        "Plan uptake is 17.9%, with 0 open disputes and 0 fraud flags."
+      ],
+      "risk_level": "high",
+      "recommended_action": "escalate_to_risk"
+    },
+    "mer-09": {
+      "headline": "Ridgeback Outdoor's delinquency rate of 21.1% is above the 20% escalation threshold, so the account goes to risk.",
+      "findings": [
+        "Delinquency rate is 21.1%, at or above the 20% escalation threshold.",
+        "3 of 19 loans are overdue and 1 loan is charged off.",
+        "Amount overdue is 3310.98 USD across the portfolio.",
+        "Plan uptake is 5.3% with 2 exceptions held and 0 blocked; there is 1 open dispute and 0 fraud flags."
+      ],
+      "risk_level": "high",
+      "recommended_action": "escalate_to_risk"
+    },
+    "mer-10": {
+      "headline": "Fernhollow Roofing shows a delinquency rate of 39.1%, which requires escalation to risk.",
+      "findings": [
+        "Delinquency rate is 39.1%, at or above the 20% escalation threshold.",
+        "8 of 23 loans are overdue and 1 loan is charged off.",
+        "Amount overdue is $17301.44.",
+        "Plan uptake is 8.7% with 1 open dispute and 0 fraud flags."
+      ],
+      "risk_level": "high",
+      "recommended_action": "escalate_to_risk"
+    },
+    "mer-11": {
+      "headline": "Sunvale Solar's delinquency rate of 26.9% is at the escalation threshold, with 3 open disputes also needing merchant input.",
+      "findings": [
+        "Delinquency rate is 26.9%, with 7 of 26 loans overdue and $8913.37 overdue.",
+        "Open disputes stand at 3, which requires merchant input.",
+        "Fraud flags total 1, below the escalation trigger of 2.",
+        "Plan uptake is 0.0%, with no loans charged off and 4 exceptions held."
+      ],
+      "risk_level": "high",
+      "recommended_action": "escalate_to_risk"
+    },
+    "mer-12": {
+      "headline": "Ashgrove Kitchens shows a 26.7% delinquency rate, which meets the escalation threshold and needs review by risk.",
+      "findings": [
+        "Delinquency rate is 26.7%, at or above the 20% escalation threshold.",
+        "3 of 15 loans are overdue and 1 loan is charged off.",
+        "Amount overdue is 5109.24 USD.",
+        "There is 1 fraud flag, 1 open dispute, and 2 exceptions held with 0 blocked."
+      ],
+      "risk_level": "high",
+      "recommended_action": "escalate_to_risk"
+    }
+  }
+}
