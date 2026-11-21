@@ -1,0 +1,35 @@
+{
+  "source": "hand-authored sample responses for the Phase 2 smoke run; not a model recording",
+  "responses": {
+    "case-0004": {
+      "action": "escalate_collections",
+      "rationale": "Loan is charged off with 141 days and $1,730.20 overdue across repeat missed instalments and no customer contact.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0022": {
+      "action": "hold_for_review",
+      "rationale": "Customer says the install failed inspection while the merchant reports only a partial refund of unconfirmed size, so the amount owed is unclear.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0028": {
+      "action": "no_action",
+      "rationale": "The missed instalment was paid after the case opened and nothing is overdue now.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    },
+    "case-0035": {
+      "action": "offer_plan",
+      "rationale": "Two missed instalments and the customer reports reduced income; a 2-month extension lowers the instalment without a fee waiver.",
+      "term_extension_months": 2,
+      "fee_waiver": false
+    },
+    "case-0093": {
+      "action": "nudge",
+      "rationale": "First missed instalment, 3 days overdue, with no hardship, dispute or fraud signal.",
+      "term_extension_months": 0,
+      "fee_waiver": false
+    }
+  }
+}

@@ -1,0 +1,29 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "bnpl-servicing-agent"
+version = "0.1.0"
+description = "A bounded agent that works a queue of BNPL payment-exception cases on governed data, with a human at the gate."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = ["anthropic>=2.12", "langgraph>=1.2"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3", "ruff>=0.8"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["bnpl"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "RUF", "N", "PTH"]
