@@ -170,3 +170,4 @@ tests/         unit and end-to-end tests
   in a public Forward Deployed Engineer job description from ClarityPay. It is not
   affiliated with, endorsed by, or built for ClarityPay, and it is not deployed or used
   by any lender. It is not production-ready.
+- **License.** MIT; see [LICENSE](LICENSE).
