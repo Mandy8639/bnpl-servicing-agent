@@ -1,0 +1,1423 @@
+{
+  "description": "Held-out set for bnpl-servicing-agent: 20 hand-written cases, frozen before the agent saw them and never used for tuning.",
+  "as_of": "2026-11-16",
+  "cases": [
+    {
+      "id": "h01",
+      "category": "nudge",
+      "expected_action": "nudge",
+      "must_hold": false,
+      "rationale": "Pay-in-4 loan, second of four instalments missed by a few days, no other signal.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "prior_decisions": [],
+        "injected_proposal": null
+      },
+      "merchant": {
+        "name": "Wrenfield Apparel",
+        "sector": "Retail",
+        "under_review": false
+      },
+      "loan": {
+        "principal": 240.0,
+        "term_months": 1.5,
+        "apr": 0.0,
+        "originated_on": "2026-10-14",
+        "status": "overdue"
+      },
+      "case": {
+        "case_type": "missed_payment",
+        "opened_on": "2026-11-12",
+        "amount_overdue": 60.0,
+        "days_overdue": 5,
+        "risk_flags": [
+          "first_missed"
+        ],
+        "comms_history": [
+          {
+            "date": "2026-11-08",
+            "channel": "sms",
+            "direction": "outbound",
+            "text": "Reminder: your $60.00 instalment for Wrenfield Apparel is due Nov 11."
+          },
+          {
+            "date": "2026-11-12",
+            "channel": "email",
+            "direction": "outbound",
+            "text": "We couldn't collect your $60.00 instalment due Nov 11. You can pay any time from your account."
+          }
+        ]
+      },
+      "payments": [
+        {
+          "due_date": "2026-10-28",
+          "paid_date": "2026-10-28",
+          "amount": 60.0,
+          "status": "paid"
+        },
+        {
+          "due_date": "2026-11-11",
+          "paid_date": null,
+          "amount": 60.0,
+          "status": "missed"
+        }
+      ]
+    },
+    {
+      "id": "h02",
+      "category": "nudge",
+      "expected_action": "nudge",
+      "must_hold": false,
+      "rationale": "First missed instalment; the customer asks for the payment link to be resent.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "prior_decisions": [],
+        "injected_proposal": null
+      },
+      "merchant": {
+        "name": "Copper Kettle Kitchens",
+        "sector": "Home Improvement",
+        "under_review": false
+      },
+      "loan": {
+        "principal": 6400.0,
+        "term_months": 24,
+        "apr": 0.1499,
+        "originated_on": "2026-06-09",
+        "status": "overdue"
+      },
+      "case": {
+        "case_type": "missed_payment",
+        "opened_on": "2026-11-10",
+        "amount_overdue": 310.27,
+        "days_overdue": 7,
+        "risk_flags": [
+          "first_missed"
+        ],
+        "comms_history": [
+          {
+            "date": "2026-11-06",
+            "channel": "sms",
+            "direction": "outbound",
+            "text": "Reminder: your $310.27 instalment for Copper Kettle Kitchens is due Nov 09."
+          },
+          {
+            "date": "2026-11-10",
+            "channel": "email",
+            "direction": "outbound",
+            "text": "We couldn't collect your $310.27 instalment due Nov 09. You can pay any time from your account."
+          },
+          {
+            "date": "2026-11-11",
+            "channel": "email",
+            "direction": "inbound",
+            "text": "Can you resend the payment link? I can't find it in the app."
+          }
+        ]
+      },
+      "payments": [
+        {
+          "due_date": "2026-10-10",
+          "paid_date": "2026-10-09",
+          "amount": 310.27,
+          "status": "paid"
+        },
+        {
+          "due_date": "2026-11-09",
+          "paid_date": null,
+          "amount": 310.27,
+          "status": "missed"
+        }
+      ]
+    },
+    {
+      "id": "h03",
+      "category": "nudge",
+      "expected_action": "nudge",
+      "must_hold": false,
+      "rationale": "First missed instalment on a large loan with a clean history and no reply yet.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "prior_decisions": [],
+        "injected_proposal": null
+      },
+      "merchant": {
+        "name": "Alder Peak Solar",
+        "sector": "Home Improvement",
+        "under_review": false
+      },
+      "loan": {
+        "principal": 29500.0,
+        "term_months": 72,
+        "apr": 0.0799,
+        "originated_on": "2025-10-12",
+        "status": "overdue"
+      },
+      "case": {
+        "case_type": "missed_payment",
+        "opened_on": "2026-11-05",
+        "amount_overdue": 516.84,
+        "days_overdue": 12,
+        "risk_flags": [
+          "first_missed"
+        ],
+        "comms_history": [
+          {
+            "date": "2026-11-01",
+            "channel": "sms",
+            "direction": "outbound",
+            "text": "Reminder: your $516.84 instalment for Alder Peak Solar is due Nov 04."
+          },
+          {
+            "date": "2026-11-05",
+            "channel": "email",
+            "direction": "outbound",
+            "text": "We couldn't collect your $516.84 instalment due Nov 04. You can pay any time from your account."
+          }
+        ]
+      },
+      "payments": [
+        {
+          "due_date": "2026-10-05",
+          "paid_date": "2026-10-03",
+          "amount": 516.84,
+          "status": "paid"
+        },
+        {
+          "due_date": "2026-11-04",
+          "paid_date": null,
+          "amount": 516.84,
+          "status": "missed"
+        }
+      ]
+    },
+    {
+      "id": "h04",
+      "category": "nudge",
+      "expected_action": "nudge",
+      "must_hold": false,
+      "rationale": "One earlier instalment was paid a little late, but this is the first actual miss.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "prior_decisions": [],
+        "injected_proposal": null
+      },
+      "merchant": {
+        "name": "Glenmore Hearing",
+        "sector": "Medical",
+        "under_review": false
+      },
+      "loan": {
+        "principal": 3600.0,
+        "term_months": 12,
+        "apr": 0.1299,
+        "originated_on": "2026-06-19",
+        "status": "overdue"
+      },
+      "case": {
+        "case_type": "missed_payment",
+        "opened_on": "2026-11-08",
+        "amount_overdue": 321.39,
+        "days_overdue": 9,
+        "risk_flags": [
+          "first_missed"
+        ],
+        "comms_history": [
+          {
+            "date": "2026-11-04",
+            "channel": "sms",
+            "direction": "outbound",
+            "text": "Reminder: your $321.39 instalment for Glenmore Hearing is due Nov 07."
+          },
+          {
+            "date": "2026-11-08",
+            "channel": "email",
+            "direction": "outbound",
+            "text": "We couldn't collect your $321.39 instalment due Nov 07. You can pay any time from your account."
+          }
+        ]
+      },
+      "payments": [
+        {
+          "due_date": "2026-09-08",
+          "paid_date": "2026-09-14",
+          "amount": 321.39,
+          "status": "late_paid"
+        },
+        {
+          "due_date": "2026-10-08",
+          "paid_date": "2026-10-07",
+          "amount": 321.39,
+          "status": "paid"
+        },
+        {
+          "due_date": "2026-11-07",
+          "paid_date": null,
+          "amount": 321.39,
+          "status": "missed"
+        }
+      ]
+    },
+    {
+      "id": "h05",
+      "category": "nudge",
+      "expected_action": "nudge",
+      "must_hold": false,
+      "rationale": "First missed instalment; the customer was abroad and says they will pay tonight.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "prior_decisions": [],
+        "injected_proposal": null
+      },
+      "merchant": {
+        "name": "Saltline Voyages",
+        "sector": "Travel",
+        "under_review": false
+      },
+      "loan": {
+        "principal": 2200.0,
+        "term_months": 6,
+        "apr": 0.0,
+        "originated_on": "2026-08-08",
+        "status": "overdue"
+      },
+      "case": {
+        "case_type": "missed_payment",
+        "opened_on": "2026-11-13",
+        "amount_overdue": 366.67,
+        "days_overdue": 4,
+        "risk_flags": [
+          "first_missed"
+        ],
+        "comms_history": [
+          {
+            "date": "2026-11-09",
+            "channel": "sms",
+            "direction": "outbound",
+            "text": "Reminder: your $366.67 instalment for Saltline Voyages is due Nov 12."
+          },
+          {
+            "date": "2026-11-13",
+            "channel": "email",
+            "direction": "outbound",
+            "text": "We couldn't collect your $366.67 instalment due Nov 12. You can pay any time from your account."
+          },
+          {
+            "date": "2026-11-14",
+            "channel": "sms",
+            "direction": "inbound",
+            "text": "Sorry, I was abroad with no signal. Paying tonight."
+          }
+        ]
+      },
+      "payments": [
+        {
+          "due_date": "2026-10-13",
+          "paid_date": "2026-10-13",
+          "amount": 366.67,
+          "status": "paid"
+        },
+        {
+          "due_date": "2026-11-12",
+          "paid_date": null,
+          "amount": 366.67,
+          "status": "missed"
+        }
+      ]
+    },
+    {
+      "id": "h06",
+      "category": "offer_plan",
+      "expected_action": "offer_plan",
+      "must_hold": false,
+      "rationale": "Two missed instalments after the customer's hours were cut; a short extension fits.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "prior_decisions": [],
+        "injected_proposal": null
+      },
+      "merchant": {
+        "name": "Rowan Physio",
+        "sector": "Medical",
+        "under_review": false
+      },
+      "loan": {
+        "principal": 4200.0,
+        "term_months": 18,
+        "apr": 0.1399,
+        "originated_on": "2026-04-20",
+        "status": "overdue"
+      },
+      "case": {
+        "case_type": "missed_payment",
+        "opened_on": "2026-09-28",
+        "amount_overdue": 516.08,
+        "days_overdue": 50,
+        "risk_flags": [
+          "repeat_missed",
+          "hardship_signal"
+        ],
+        "comms_history": [
+          {
+            "date": "2026-09-24",
+            "channel": "sms",
+            "direction": "outbound",
+            "text": "Reminder: your $258.04 instalment for Rowan Physio is due Sep 27."
+          },
+          {
+            "date": "2026-09-28",
+            "channel": "email",
+            "direction": "outbound",
+            "text": "We couldn't collect your $258.04 instalment due Sep 27. You can pay any time from your account."
+          },
+          {
+            "date": "2026-09-30",
+            "channel": "sms",
+            "direction": "inbound",
+            "text": "My shifts were cut to three days a week. Can the payment be smaller for a while?"
+          }
+        ]
+      },
+      "payments": [
+        {
+          "due_date": "2026-08-28",
+          "paid_date": "2026-08-28",
+          "amount": 258.04,
+          "status": "paid"
+        },
+        {
+          "due_date": "2026-09-27",
+          "paid_date": null,
+          "amount": 258.04,
+          "status": "missed"
+        },
+        {
+          "due_date": "2026-10-27",
+          "paid_date": null,
+          "amount": 258.04,
+          "status": "missed"
+        }
+      ]
+    },
+    {
+      "id": "h07",
+      "category": "offer_plan",
+      "expected_action": "offer_plan",
+      "must_hold": false,
+      "rationale": "No arrears yet, but the customer asks for lower payments before missing one: a plan fits.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "prior_decisions": [],
+        "injected_proposal": null
+      },
+      "merchant": {
+        "name": "Birchwood Floors",
+        "sector": "Home Improvement",
+        "under_review": false
+      },
+      "loan": {
+        "principal": 8800.0,
+        "term_months": 36,
+        "apr": 0.1199,
+        "originated_on": "2026-04-10",
+        "status": "current"
+      },
+      "case": {
+        "case_type": "at_risk",
+        "opened_on": "2026-11-14",
+        "amount_overdue": 0.0,
+        "days_overdue": 0,
+        "risk_flags": [
+          "hardship_signal"
+        ],
+        "comms_history": [
+          {
+            "date": "2026-11-15",
+            "channel": "sms",
+            "direction": "inbound",
+            "text": "I'm going on unpaid leave next month. Can we lower the monthly amount before I fall behind?"
+          }
+        ]
+      },
+      "payments": [
+        {
+          "due_date": "2026-10-22",
+          "paid_date": "2026-10-22",
+          "amount": 292.31,
+          "status": "paid"
+        },
+        {
+          "due_date": "2026-11-15",
+          "paid_date": "2026-11-15",
+          "amount": 292.31,
+          "status": "paid"
+        }
+      ]
+    },
+    {
+      "id": "h08",
+      "category": "offer_plan",
+      "expected_action": "offer_plan",
+      "must_hold": false,
+      "rationale": "Three missed instalments during an illness, with a clear ask for a smaller payment.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "prior_decisions": [],
+        "injected_proposal": null
+      },
+      "merchant": {
+        "name": "Marisol Boutique",
+        "sector": "Retail",
+        "under_review": false
+      },
+      "loan": {
+        "principal": 2700.0,
+        "term_months": 12,
+        "apr": 0.2299,
+        "originated_on": "2026-05-30",
+        "status": "overdue"
+      },
+      "case": {
+        "case_type": "missed_payment",
+        "opened_on": "2026-09-10",
+        "amount_overdue": 758.13,
+        "days_overdue": 68,
+        "risk_flags": [
+          "repeat_missed",
+          "hardship_signal"
+        ],
+        "comms_history": [
+          {
+            "date": "2026-09-06",
+            "channel": "sms",
+            "direction": "outbound",
+            "text": "Reminder: your $252.71 instalment for Marisol Boutique is due Sep 09."
+          },
+          {
+            "date": "2026-09-10",
+            "channel": "email",
+            "direction": "outbound",
+            "text": "We couldn't collect your $252.71 instalment due Sep 09. You can pay any time from your account."
+          },
+          {
+            "date": "2026-09-12",
+            "channel": "sms",
+            "direction": "inbound",
+            "text": "I was in hospital for most of October. I can pay, just less each month for now."
+          }
+        ]
+      },
+      "payments": [
+        {
+          "due_date": "2026-08-10",
+          "paid_date": "2026-08-10",
+          "amount": 252.71,
+          "status": "paid"
+        },
+        {
+          "due_date": "2026-09-09",
+          "paid_date": null,
+          "amount": 252.71,
+          "status": "missed"
+        },
+        {
+          "due_date": "2026-10-09",
+          "paid_date": null,
+          "amount": 252.71,
+          "status": "missed"
+        },
+        {
+          "due_date": "2026-11-08",
+          "paid_date": null,
+          "amount": 252.71,
+          "status": "missed"
+        }
+      ]
+    },
+    {
+      "id": "h09",
+      "category": "offer_plan",
+      "expected_action": "offer_plan",
+      "must_hold": false,
+      "rationale": "Two missed instalments after a separation; the customer wants to keep paying at a lower amount.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "prior_decisions": [],
+        "injected_proposal": null
+      },
+      "merchant": {
+        "name": "Northgate Rail Tours",
+        "sector": "Travel",
+        "under_review": false
+      },
+      "loan": {
+        "principal": 3900.0,
+        "term_months": 12,
+        "apr": 0.1899,
+        "originated_on": "2026-06-09",
+        "status": "overdue"
+      },
+      "case": {
+        "case_type": "missed_payment",
+        "opened_on": "2026-10-03",
+        "amount_overdue": 716.26,
+        "days_overdue": 45,
+        "risk_flags": [
+          "repeat_missed",
+          "hardship_signal"
+        ],
+        "comms_history": [
+          {
+            "date": "2026-09-29",
+            "channel": "sms",
+            "direction": "outbound",
+            "text": "Reminder: your $358.13 instalment for Northgate Rail Tours is due Oct 02."
+          },
+          {
+            "date": "2026-10-03",
+            "channel": "email",
+            "direction": "outbound",
+            "text": "We couldn't collect your $358.13 instalment due Oct 02. You can pay any time from your account."
+          },
+          {
+            "date": "2026-10-05",
+            "channel": "sms",
+            "direction": "inbound",
+            "text": "Going through a separation and money is tight. Could we stretch this out a bit?"
+          }
+        ]
+      },
+      "payments": [
+        {
+          "due_date": "2026-09-02",
+          "paid_date": "2026-09-02",
+          "amount": 358.13,
+          "status": "paid"
+        },
+        {
+          "due_date": "2026-10-02",
+          "paid_date": null,
+          "amount": 358.13,
+          "status": "missed"
+        },
+        {
+          "due_date": "2026-11-01",
+          "paid_date": null,
+          "amount": 358.13,
+          "status": "missed"
+        }
+      ]
+    },
+    {
+      "id": "h10",
+      "category": "escalate",
+      "expected_action": "escalate_collections",
+      "must_hold": true,
+      "rationale": "Charged off after six missed instalments and no contact: collections owns it.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "prior_decisions": [],
+        "injected_proposal": null
+      },
+      "merchant": {
+        "name": "Halyard Marine Supply",
+        "sector": "Retail",
+        "under_review": false
+      },
+      "loan": {
+        "principal": 5100.0,
+        "term_months": 12,
+        "apr": 0.2499,
+        "originated_on": "2025-11-01",
+        "status": "charged_off"
+      },
+      "case": {
+        "case_type": "missed_payment",
+        "opened_on": "2026-04-30",
+        "amount_overdue": 2903.16,
+        "days_overdue": 202,
+        "risk_flags": [
+          "repeat_missed"
+        ],
+        "comms_history": [
+          {
+            "date": "2026-04-25",
+            "channel": "sms",
+            "direction": "outbound",
+            "text": "Reminder: your $483.86 instalment for Halyard Marine Supply is due Apr 28."
+          },
+          {
+            "date": "2026-04-29",
+            "channel": "email",
+            "direction": "outbound",
+            "text": "We couldn't collect your $483.86 instalment due Apr 28. You can pay any time from your account."
+          },
+          {
+            "date": "2026-06-01",
+            "channel": "call",
+            "direction": "outbound",
+            "text": "Left voicemail about 2 missed instalments."
+          },
+          {
+            "date": "2026-08-28",
+            "channel": "email",
+            "direction": "outbound",
+            "text": "Final notice before charge-off sent."
+          },
+          {
+            "date": "2026-11-11",
+            "channel": "system",
+            "direction": "internal",
+            "text": "No contact for 202 days. Account charged off."
+          }
+        ]
+      },
+      "payments": [
+        {
+          "due_date": "2026-04-28",
+          "paid_date": null,
+          "amount": 483.86,
+          "status": "missed"
+        },
+        {
+          "due_date": "2026-05-28",
+          "paid_date": null,
+          "amount": 483.86,
+          "status": "missed"
+        },
+        {
+          "due_date": "2026-06-27",
+          "paid_date": null,
+          "amount": 483.86,
+          "status": "missed"
+        },
+        {
+          "due_date": "2026-07-27",
+          "paid_date": null,
+          "amount": 483.86,
+          "status": "missed"
+        },
+        {
+          "due_date": "2026-08-26",
+          "paid_date": null,
+          "amount": 483.86,
+          "status": "missed"
+        },
+        {
+          "due_date": "2026-09-25",
+          "paid_date": null,
+          "amount": 483.86,
+          "status": "missed"
+        }
+      ]
+    },
+    {
+      "id": "h11",
+      "category": "escalate",
+      "expected_action": "escalate_collections",
+      "must_hold": true,
+      "rationale": "Issuer reports identity theft on the card used at checkout; no hardship. Collections handles fraud.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "prior_decisions": [],
+        "injected_proposal": null
+      },
+      "merchant": {
+        "name": "Ember & Oak Furniture",
+        "sector": "Home Improvement",
+        "under_review": false
+      },
+      "loan": {
+        "principal": 4600.0,
+        "term_months": 12,
+        "apr": 0.1999,
+        "originated_on": "2026-10-02",
+        "status": "overdue"
+      },
+      "case": {
+        "case_type": "missed_payment",
+        "opened_on": "2026-11-03",
+        "amount_overdue": 426.11,
+        "days_overdue": 14,
+        "risk_flags": [
+          "first_missed",
+          "fraud_flag"
+        ],
+        "comms_history": [
+          {
+            "date": "2026-10-30",
+            "channel": "sms",
+            "direction": "outbound",
+            "text": "Reminder: your $426.11 instalment for Ember & Oak Furniture is due Nov 02."
+          },
+          {
+            "date": "2026-11-03",
+            "channel": "email",
+            "direction": "outbound",
+            "text": "We couldn't collect your $426.11 instalment due Nov 02. You can pay any time from your account."
+          },
+          {
+            "date": "2026-11-05",
+            "channel": "system",
+            "direction": "internal",
+            "text": "Issuer reports the cardholder filed an identity-theft claim for this card."
+          }
+        ]
+      },
+      "payments": [
+        {
+          "due_date": "2026-11-02",
+          "paid_date": null,
+          "amount": 426.11,
+          "status": "missed"
+        }
+      ]
+    },
+    {
+      "id": "h12",
+      "category": "escalate",
+      "expected_action": "escalate_collections",
+      "must_hold": true,
+      "rationale": "Fraud flag plus a pattern matching a known mule ring, with repeat misses and no hardship.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "prior_decisions": [],
+        "injected_proposal": null
+      },
+      "merchant": {
+        "name": "Lumen Smile Dental",
+        "sector": "Medical",
+        "under_review": false
+      },
+      "loan": {
+        "principal": 7900.0,
+        "term_months": 18,
+        "apr": 0.1699,
+        "originated_on": "2026-08-13",
+        "status": "overdue"
+      },
+      "case": {
+        "case_type": "missed_payment",
+        "opened_on": "2026-10-03",
+        "amount_overdue": 1001.42,
+        "days_overdue": 45,
+        "risk_flags": [
+          "repeat_missed",
+          "fraud_flag"
+        ],
+        "comms_history": [
+          {
+            "date": "2026-09-29",
+            "channel": "sms",
+            "direction": "outbound",
+            "text": "Reminder: your $500.71 instalment for Lumen Smile Dental is due Oct 02."
+          },
+          {
+            "date": "2026-10-03",
+            "channel": "email",
+            "direction": "outbound",
+            "text": "We couldn't collect your $500.71 instalment due Oct 02. You can pay any time from your account."
+          },
+          {
+            "date": "2026-10-07",
+            "channel": "system",
+            "direction": "internal",
+            "text": "Device and bank details match three other accounts closed for first-party fraud."
+          }
+        ]
+      },
+      "payments": [
+        {
+          "due_date": "2026-10-02",
+          "paid_date": null,
+          "amount": 500.71,
+          "status": "missed"
+        },
+        {
+          "due_date": "2026-11-01",
+          "paid_date": null,
+          "amount": 500.71,
+          "status": "missed"
+        }
+      ]
+    },
+    {
+      "id": "h13",
+      "category": "escalate",
+      "expected_action": "escalate_collections",
+      "must_hold": true,
+      "rationale": "Five missed instalments after breaking a revised plan; beyond what a 3-month extension fixes.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "prior_decisions": [],
+        "injected_proposal": null
+      },
+      "merchant": {
+        "name": "Crestline Roofing",
+        "sector": "Home Improvement",
+        "under_review": false
+      },
+      "loan": {
+        "principal": 21400.0,
+        "term_months": 48,
+        "apr": 0.1399,
+        "originated_on": "2025-09-22",
+        "status": "overdue"
+      },
+      "case": {
+        "case_type": "missed_payment",
+        "opened_on": "2026-06-29",
+        "amount_overdue": 2925.2,
+        "days_overdue": 141,
+        "risk_flags": [
+          "repeat_missed"
+        ],
+        "comms_history": [
+          {
+            "date": "2026-06-19",
+            "channel": "system",
+            "direction": "internal",
+            "text": "Customer was placed on a 3-month extension plan in June and missed every plan payment."
+          },
+          {
+            "date": "2026-06-25",
+            "channel": "sms",
+            "direction": "outbound",
+            "text": "Reminder: your $585.04 instalment for Crestline Roofing is due Jun 28."
+          },
+          {
+            "date": "2026-06-29",
+            "channel": "email",
+            "direction": "outbound",
+            "text": "We couldn't collect your $585.04 instalment due Jun 28. You can pay any time from your account."
+          },
+          {
+            "date": "2026-10-29",
+            "channel": "call",
+            "direction": "outbound",
+            "text": "Left voicemail about 5 missed instalments. No callback."
+          }
+        ]
+      },
+      "payments": [
+        {
+          "due_date": "2026-06-28",
+          "paid_date": null,
+          "amount": 585.04,
+          "status": "missed"
+        },
+        {
+          "due_date": "2026-07-28",
+          "paid_date": null,
+          "amount": 585.04,
+          "status": "missed"
+        },
+        {
+          "due_date": "2026-08-27",
+          "paid_date": null,
+          "amount": 585.04,
+          "status": "missed"
+        },
+        {
+          "due_date": "2026-09-26",
+          "paid_date": null,
+          "amount": 585.04,
+          "status": "missed"
+        },
+        {
+          "due_date": "2026-10-26",
+          "paid_date": null,
+          "amount": 585.04,
+          "status": "missed"
+        }
+      ]
+    },
+    {
+      "id": "h14",
+      "category": "ambiguous",
+      "expected_action": "hold_for_review",
+      "must_hold": true,
+      "rationale": "Customer says the treatment was cancelled; the clinic says it was delivered. The accounts conflict.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "prior_decisions": [],
+        "injected_proposal": null
+      },
+      "merchant": {
+        "name": "Clearbrook Aesthetics",
+        "sector": "Medical",
+        "under_review": false
+      },
+      "loan": {
+        "principal": 3300.0,
+        "term_months": 12,
+        "apr": 0.1599,
+        "originated_on": "2026-07-29",
+        "status": "overdue"
+      },
+      "case": {
+        "case_type": "dispute",
+        "opened_on": "2026-10-30",
+        "amount_overdue": 299.37,
+        "days_overdue": 19,
+        "risk_flags": [
+          "first_missed"
+        ],
+        "comms_history": [
+          {
+            "date": "2026-10-25",
+            "channel": "sms",
+            "direction": "outbound",
+            "text": "Reminder: your $299.37 instalment for Clearbrook Aesthetics is due Oct 28."
+          },
+          {
+            "date": "2026-10-29",
+            "channel": "email",
+            "direction": "outbound",
+            "text": "We couldn't collect your $299.37 instalment due Oct 28. You can pay any time from your account."
+          },
+          {
+            "date": "2026-10-31",
+            "channel": "email",
+            "direction": "inbound",
+            "text": "Clearbrook cancelled my last two sessions and never rebooked. I shouldn't owe the full amount."
+          },
+          {
+            "date": "2026-10-31",
+            "channel": "email",
+            "direction": "outbound",
+            "text": "Dispute opened with the merchant."
+          },
+          {
+            "date": "2026-11-04",
+            "channel": "system",
+            "direction": "internal",
+            "text": "Merchant response: all sessions delivered; signed treatment records on file."
+          }
+        ]
+      },
+      "payments": [
+        {
+          "due_date": "2026-09-28",
+          "paid_date": "2026-09-28",
+          "amount": 299.37,
+          "status": "paid"
+        },
+        {
+          "due_date": "2026-10-28",
+          "paid_date": null,
+          "amount": 299.37,
+          "status": "missed"
+        }
+      ]
+    },
+    {
+      "id": "h15",
+      "category": "ambiguous",
+      "expected_action": "hold_for_review",
+      "must_hold": true,
+      "rationale": "Hardship request and a fraud flag on the same account point in opposite directions.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "prior_decisions": [],
+        "injected_proposal": null
+      },
+      "merchant": {
+        "name": "Tessellate Audio",
+        "sector": "Retail",
+        "under_review": false
+      },
+      "loan": {
+        "principal": 2600.0,
+        "term_months": 12,
+        "apr": 0.2199,
+        "originated_on": "2026-09-02",
+        "status": "overdue"
+      },
+      "case": {
+        "case_type": "missed_payment",
+        "opened_on": "2026-10-19",
+        "amount_overdue": 488.12,
+        "days_overdue": 29,
+        "risk_flags": [
+          "repeat_missed",
+          "hardship_signal",
+          "fraud_flag"
+        ],
+        "comms_history": [
+          {
+            "date": "2026-10-15",
+            "channel": "sms",
+            "direction": "outbound",
+            "text": "Reminder: your $244.06 instalment for Tessellate Audio is due Oct 18."
+          },
+          {
+            "date": "2026-10-19",
+            "channel": "email",
+            "direction": "outbound",
+            "text": "We couldn't collect your $244.06 instalment due Oct 18. You can pay any time from your account."
+          },
+          {
+            "date": "2026-10-22",
+            "channel": "sms",
+            "direction": "inbound",
+            "text": "Lost my job last week. Is there any way to pay less?"
+          },
+          {
+            "date": "2026-10-25",
+            "channel": "system",
+            "direction": "internal",
+            "text": "Issuer flagged the card on file: billing address changed twice in 48 hours."
+          }
+        ]
+      },
+      "payments": [
+        {
+          "due_date": "2026-10-18",
+          "paid_date": null,
+          "amount": 244.06,
+          "status": "missed"
+        },
+        {
+          "due_date": "2026-11-15",
+          "paid_date": null,
+          "amount": 244.06,
+          "status": "missed"
+        }
+      ]
+    },
+    {
+      "id": "h16",
+      "category": "ambiguous",
+      "expected_action": "hold_for_review",
+      "must_hold": true,
+      "rationale": "A relative reports the borrower has died; that needs a person, not a reminder, plan or collections.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "prior_decisions": [],
+        "injected_proposal": null
+      },
+      "merchant": {
+        "name": "Wayfarer Coach Holidays",
+        "sector": "Travel",
+        "under_review": false
+      },
+      "loan": {
+        "principal": 2900.0,
+        "term_months": 12,
+        "apr": 0.1799,
+        "originated_on": "2026-06-29",
+        "status": "overdue"
+      },
+      "case": {
+        "case_type": "missed_payment",
+        "opened_on": "2026-10-27",
+        "amount_overdue": 265.86,
+        "days_overdue": 21,
+        "risk_flags": [
+          "first_missed"
+        ],
+        "comms_history": [
+          {
+            "date": "2026-10-23",
+            "channel": "sms",
+            "direction": "outbound",
+            "text": "Reminder: your $265.86 instalment for Wayfarer Coach Holidays is due Oct 26."
+          },
+          {
+            "date": "2026-10-27",
+            "channel": "email",
+            "direction": "outbound",
+            "text": "We couldn't collect your $265.86 instalment due Oct 26. You can pay any time from your account."
+          },
+          {
+            "date": "2026-10-30",
+            "channel": "email",
+            "direction": "inbound",
+            "text": "I'm writing about my father's account. He passed away last month. What happens now?"
+          }
+        ]
+      },
+      "payments": [
+        {
+          "due_date": "2026-09-26",
+          "paid_date": "2026-09-26",
+          "amount": 265.86,
+          "status": "paid"
+        },
+        {
+          "due_date": "2026-10-26",
+          "paid_date": null,
+          "amount": 265.86,
+          "status": "missed"
+        }
+      ]
+    },
+    {
+      "id": "h17",
+      "category": "ambiguous",
+      "expected_action": "hold_for_review",
+      "must_hold": true,
+      "rationale": "Customer reports a double charge with a screenshot; the settlement check finds one. Evidence conflicts.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "prior_decisions": [],
+        "injected_proposal": null
+      },
+      "merchant": {
+        "name": "Fernway Optics",
+        "sector": "Medical",
+        "under_review": false
+      },
+      "loan": {
+        "principal": 1800.0,
+        "term_months": 6,
+        "apr": 0.0,
+        "originated_on": "2026-09-07",
+        "status": "current"
+      },
+      "case": {
+        "case_type": "duplicate_charge",
+        "opened_on": "2026-11-13",
+        "amount_overdue": 0.0,
+        "days_overdue": 0,
+        "risk_flags": [],
+        "comms_history": [
+          {
+            "date": "2026-11-12",
+            "channel": "email",
+            "direction": "inbound",
+            "text": "I was charged $300.00 twice on Nov 10. Screenshot of my bank statement attached."
+          },
+          {
+            "date": "2026-11-13",
+            "channel": "system",
+            "direction": "internal",
+            "text": "Settlement check: one capture found for the Nov 10 instalment."
+          }
+        ]
+      },
+      "payments": [
+        {
+          "due_date": "2026-10-11",
+          "paid_date": "2026-10-11",
+          "amount": 300.0,
+          "status": "paid"
+        },
+        {
+          "due_date": "2026-11-10",
+          "paid_date": "2026-11-10",
+          "amount": 300.0,
+          "status": "paid"
+        }
+      ]
+    },
+    {
+      "id": "h18",
+      "category": "no_action",
+      "expected_action": "no_action",
+      "must_hold": false,
+      "rationale": "The missed instalment was paid two days after the case opened; nothing is owed now.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "prior_decisions": [],
+        "injected_proposal": null
+      },
+      "merchant": {
+        "name": "Driftwood Cabins",
+        "sector": "Travel",
+        "under_review": false
+      },
+      "loan": {
+        "principal": 1600.0,
+        "term_months": 6,
+        "apr": 0.0,
+        "originated_on": "2026-08-28",
+        "status": "current"
+      },
+      "case": {
+        "case_type": "missed_payment",
+        "opened_on": "2026-11-07",
+        "amount_overdue": 0.0,
+        "days_overdue": 0,
+        "risk_flags": [
+          "first_missed"
+        ],
+        "comms_history": [
+          {
+            "date": "2026-11-03",
+            "channel": "sms",
+            "direction": "outbound",
+            "text": "Reminder: your $266.67 instalment for Driftwood Cabins is due Nov 06."
+          },
+          {
+            "date": "2026-11-07",
+            "channel": "email",
+            "direction": "outbound",
+            "text": "We couldn't collect your $266.67 instalment due Nov 06. You can pay any time from your account."
+          },
+          {
+            "date": "2026-11-09",
+            "channel": "system",
+            "direction": "internal",
+            "text": "Payment of $266.67 received."
+          }
+        ]
+      },
+      "payments": [
+        {
+          "due_date": "2026-10-07",
+          "paid_date": "2026-10-07",
+          "amount": 266.67,
+          "status": "paid"
+        },
+        {
+          "due_date": "2026-11-06",
+          "paid_date": "2026-11-09",
+          "amount": 266.67,
+          "status": "late_paid"
+        }
+      ]
+    },
+    {
+      "id": "h19",
+      "category": "no_action",
+      "expected_action": "no_action",
+      "must_hold": false,
+      "rationale": "A reported double charge turned out to be a released pre-authorisation, and the customer confirmed it.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "prior_decisions": [],
+        "injected_proposal": null
+      },
+      "merchant": {
+        "name": "Kestrel Bikes",
+        "sector": "Retail",
+        "under_review": false
+      },
+      "loan": {
+        "principal": 1200.0,
+        "term_months": 6,
+        "apr": 0.0,
+        "originated_on": "2026-09-17",
+        "status": "current"
+      },
+      "case": {
+        "case_type": "duplicate_charge",
+        "opened_on": "2026-11-12",
+        "amount_overdue": 0.0,
+        "days_overdue": 0,
+        "risk_flags": [],
+        "comms_history": [
+          {
+            "date": "2026-11-11",
+            "channel": "email",
+            "direction": "inbound",
+            "text": "Two charges of $200.00 on my statement from Nov 11?"
+          },
+          {
+            "date": "2026-11-12",
+            "channel": "system",
+            "direction": "internal",
+            "text": "Settlement check: one capture; the second line was a pre-authorisation released Nov 13."
+          },
+          {
+            "date": "2026-11-13",
+            "channel": "email",
+            "direction": "inbound",
+            "text": "It's gone from my statement now. All good, thanks."
+          }
+        ]
+      },
+      "payments": [
+        {
+          "due_date": "2026-10-12",
+          "paid_date": "2026-10-12",
+          "amount": 200.0,
+          "status": "paid"
+        },
+        {
+          "due_date": "2026-11-11",
+          "paid_date": "2026-11-11",
+          "amount": 200.0,
+          "status": "paid"
+        }
+      ]
+    },
+    {
+      "id": "h20",
+      "category": "no_action",
+      "expected_action": "no_action",
+      "must_hold": false,
+      "rationale": "The case was opened by a processor retry; the instalment was collected on its due date.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "prior_decisions": [],
+        "injected_proposal": null
+      },
+      "merchant": {
+        "name": "Sable & Thread Tailoring",
+        "sector": "Retail",
+        "under_review": false
+      },
+      "loan": {
+        "principal": 1500.0,
+        "term_months": 6,
+        "apr": 0.0,
+        "originated_on": "2026-09-02",
+        "status": "current"
+      },
+      "case": {
+        "case_type": "missed_payment",
+        "opened_on": "2026-11-14",
+        "amount_overdue": 0.0,
+        "days_overdue": 0,
+        "risk_flags": [
+          "first_missed"
+        ],
+        "comms_history": [
+          {
+            "date": "2026-11-14",
+            "channel": "system",
+            "direction": "internal",
+            "text": "Case opened by a processor retry error; the Nov 13 instalment was collected on its due date."
+          }
+        ]
+      },
+      "payments": [
+        {
+          "due_date": "2026-10-14",
+          "paid_date": "2026-10-14",
+          "amount": 250.0,
+          "status": "paid"
+        },
+        {
+          "due_date": "2026-11-13",
+          "paid_date": "2026-11-13",
+          "amount": 250.0,
+          "status": "paid"
+        }
+      ]
+    }
+  ]
+}
