@@ -11,3 +11,6 @@ dist/
 build/
 .DS_Store
 data/spend.json
+
+# Private build notes; never publish
+claritypay-bnpl-agent-prompt.md
