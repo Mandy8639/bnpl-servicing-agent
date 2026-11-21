@@ -75,6 +75,18 @@ def parse_proposal(case_id: str, raw: object) -> Proposal:
     return Proposal(case_id=case_id, action=action, rationale=rationale, plan=plan)
 
 
+class FixedProposer:
+    """Returns one given raw proposal: for MCP clients and injected control scenarios."""
+
+    def __init__(self, raw: dict[str, Any], source: str) -> None:
+        self._raw, self._source = raw, source
+
+    def propose(self, case: Case, payments: list[Payment]) -> ProposerResponse:
+        return ProposerResponse(
+            parse_proposal(case.case_id, self._raw), self._raw, 0.0, self._source
+        )
+
+
 # --- Stub mode: replay a cassette -----------------------------------------------------
 
 

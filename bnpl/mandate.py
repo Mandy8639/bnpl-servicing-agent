@@ -78,3 +78,62 @@ MANDATE: tuple[ActionRule, ...] = (
         "Auto, with a logged reason, only when nothing is overdue on the record; otherwise HOLD",
     ),
 )
+
+
+# --- Merchant report agent -------------------------------------------------------------
+
+
+class ReportAction(StrEnum):
+    NO_CHANGE = "no_change"
+    MONITOR = "monitor"
+    REVIEW_WITH_MERCHANT = "review_with_merchant"
+    ESCALATE_TO_RISK = "escalate_to_risk"
+
+
+class RiskLevel(StrEnum):
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+
+
+@dataclass(frozen=True)
+class ReportRule:
+    action: ReportAction
+    meaning: str
+    risk: Risk
+    handling: str
+
+
+REPORT_OWNER = "portfolio risk lead"
+REPORT_MEDIUM_DELINQUENCY = 0.05
+REPORT_HIGH_DELINQUENCY = 0.20
+REPORT_HIGH_PLAN_UPTAKE = 0.25
+REPORT_DISPUTES_FOR_REVIEW = 2
+REPORT_FRAUD_FLAGS_FOR_ESCALATION = 2
+
+REPORT_MANDATE: tuple[ReportRule, ...] = (
+    ReportRule(
+        ReportAction.NO_CHANGE,
+        "Portfolio is healthy; publish the summary",
+        Risk.LOW,
+        "Auto-publish if every number is grounded",
+    ),
+    ReportRule(
+        ReportAction.MONITOR,
+        "Watch a rising metric next week",
+        Risk.LOW,
+        "Auto-publish if every number is grounded",
+    ),
+    ReportRule(
+        ReportAction.REVIEW_WITH_MERCHANT,
+        "Raise disputes or arrears with the merchant",
+        Risk.MEDIUM,
+        f"Always HOLD for the {REPORT_OWNER}: it is an external conversation",
+    ),
+    ReportRule(
+        ReportAction.ESCALATE_TO_RISK,
+        "Escalate the merchant to portfolio risk",
+        Risk.HIGH,
+        f"Always HOLD for the {REPORT_OWNER}",
+    ),
+)

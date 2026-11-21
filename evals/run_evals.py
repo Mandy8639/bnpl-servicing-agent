@@ -21,17 +21,16 @@ from typing import Any
 
 from bnpl.agent import Alert, CaseOutcome, ServicingAgent, Status
 from bnpl.config import load_env_file
-from bnpl.governed import Case, GovernedLedger, Payment
+from bnpl.governed import GovernedLedger
 from bnpl.mandate import Action
 from bnpl.proposers import (
     DEFAULT_MODEL,
     PROMPT_VERSION,
     Cassette,
+    FixedProposer,
     Proposer,
-    ProposerResponse,
     RecordedProposer,
     live_proposer_from_env,
-    parse_proposal,
 )
 from evals.fixtures import build_eval_ledger
 from evals.report import write_reports
@@ -62,16 +61,6 @@ def verify_frozen(golden_path: Path = GOLDEN_PATH, lock_path: Path = LOCK_PATH) 
             "golden_cases.json changed since it was frozen. Fix the agent, not the golden set."
         )
     return digest
-
-
-class InjectedProposer:
-    """Stands in for a faulty model in control scenarios: returns a fixed raw proposal."""
-
-    def __init__(self, raw: dict[str, Any]) -> None:
-        self._raw = raw
-
-    def propose(self, case: Case, payments: list[Payment]) -> ProposerResponse:
-        return ProposerResponse(parse_proposal(case.case_id, self._raw), self._raw, 0.0, "injected")
 
 
 @dataclass
@@ -184,6 +173,7 @@ class EvalRun:
 
     def to_dict(self) -> dict[str, Any]:
         return {
+            "suite": "servicing",
             "mode": self.mode,
             "model": self.model,
             "proposer_source": self.proposer_source,
@@ -211,7 +201,7 @@ def run_case(golden: dict[str, Any], proposer: Proposer, workdir: Path) -> CaseR
     with GovernedLedger(path, clock=lambda: EVAL_NOW) as ledger:
         agent = ServicingAgent(
             ledger,
-            InjectedProposer(injected) if injected else proposer,
+            FixedProposer(injected, "injected") if injected else proposer,
             clock=lambda: EVAL_NOW,
             on_alert=alerts.append,
         )

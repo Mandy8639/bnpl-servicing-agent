@@ -114,10 +114,49 @@ Then `bnpl review list`, `bnpl review approve <case> --actor "You" --reason "…
 | [`2026-11-21-stub.json`](evals/reports/2026-11-21-stub.json) | stub | v2 | 97.8% | 0 | pass |
 <!-- /generated:history -->
 
+## Merchant reports: a second agent, same rules
+
+A weekly portfolio-health summary for one merchant, written by Claude from governed
+metrics only (delinquency, plan uptake, disputes, fraud flags, held exceptions). The
+same idea as the servicing agent: the model proposes, a deterministic guardrail decides.
+It blocks any report that states a number not in the metrics or the published policy,
+names a customer, or uses an action outside the report mandate. It holds stale data, a
+merchant under review, a risk level lower than the metrics show, and anything external
+or escalated. It has its own frozen golden set and gate: no report that must hold may
+publish (false-publish = 0).
+
+<!-- generated:merchant -->
+| Report | Mode | Risk accuracy | Action accuracy | False-publish | Controls | Grounding blocks | Gate |
+|---|---|---|---|---|---|---|---|
+| [`2026-11-21-merchant-live.json`](evals/reports/2026-11-21-merchant-live.json) | live | 90.0% | 90.0% (9/10) | 0 | 100% (4) | 4 | pass |
+| [`2026-11-21-merchant-stub.json`](evals/reports/2026-11-21-merchant-stub.json) | stub | 90.0% | 90.0% (9/10) | 0 | 100% (4) | 0 | pass |
+
+| Action | Meaning | Risk | Handling |
+|---|---|---|---|
+| `no_change` | Portfolio is healthy; publish the summary | Low | Auto-publish if every number is grounded |
+| `monitor` | Watch a rising metric next week | Low | Auto-publish if every number is grounded |
+| `review_with_merchant` | Raise disputes or arrears with the merchant | Medium | Always HOLD for the portfolio risk lead: it is an external conversation |
+| `escalate_to_risk` | Escalate the merchant to portfolio risk | High | Always HOLD for the portfolio risk lead |
+<!-- /generated:merchant -->
+
+In the first live run the guardrail blocked sound reports that quoted a policy
+threshold ("below the monitoring threshold", with its percentage). That was the
+guardrail being too strict, so published thresholds now count as grounded. The stub
+row replays the same recorded reports under the fixed guardrail; the live row is kept
+as it ran.
+
+## The agent's tools over MCP
+
+`bnpl mcp` serves the agent's tools to any MCP client over stdio: `get_case`,
+`list_exceptions`, `propose_action` and `submit_for_review`. A client's proposal runs
+through the same governed ledger, guardrail, pause conditions and review queue as the
+built-in agent, so it cannot execute anything the guardrail would hold or block.
+
 ## Project layout
 
 ```
-bnpl/          agent loop, guardrail, mandate, governed ledger, review, controls, CLI, API
+bnpl/          agent loop, guardrail, mandate, governed ledger, review, controls, CLI, API,
+               merchant-report agent, MCP server
 bnpl/dashboard static dashboard served by the API (no build step)
 evals/         golden set, harness, reports, recorded model responses
 tests/         unit and end-to-end tests

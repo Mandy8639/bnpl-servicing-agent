@@ -67,6 +67,28 @@ CREATE TABLE exceptions (
     timestamp   TEXT NOT NULL
 );
 
+CREATE TABLE merchant_reports (
+    id                 INTEGER PRIMARY KEY,
+    merchant_id        TEXT NOT NULL,
+    period_end         TEXT NOT NULL,
+    risk_level         TEXT,
+    recommended_action TEXT,
+    body               TEXT NOT NULL,
+    verdict            TEXT NOT NULL CHECK (verdict IN ('ALLOW', 'HOLD', 'BLOCK')),
+    reason_code        TEXT NOT NULL,
+    status             TEXT NOT NULL
+                       CHECK (status IN ('published', 'held', 'blocked', 'approved', 'rejected')),
+    actor              TEXT NOT NULL,
+    reason             TEXT NOT NULL DEFAULT '',
+    supersedes         INTEGER,
+    timestamp          TEXT NOT NULL
+);
+
+CREATE TRIGGER merchant_reports_no_update BEFORE UPDATE ON merchant_reports
+BEGIN SELECT RAISE(ABORT, 'merchant_reports is append-only'); END;
+CREATE TRIGGER merchant_reports_no_delete BEFORE DELETE ON merchant_reports
+BEGIN SELECT RAISE(ABORT, 'merchant_reports is append-only'); END;
+
 -- The audit log and the exception inventory are append-only.
 CREATE TRIGGER decisions_no_update BEFORE UPDATE ON decisions
 BEGIN SELECT RAISE(ABORT, 'decisions is append-only'); END;
@@ -130,3 +152,36 @@ SELECT COALESCE(MAX(id), 0) AS last_id FROM decisions;
 
 CREATE VIEW v_exceptions AS
 SELECT id, case_id, kind, reason_code, detail, timestamp FROM exceptions;
+
+CREATE VIEW v_merchant_reports AS
+SELECT id, merchant_id, period_end, risk_level, recommended_action, body, verdict, reason_code,
+       status, actor, reason, supersedes, timestamp
+FROM merchant_reports;
+
+-- Portfolio health per merchant: the only input the merchant-report agent reads.
+CREATE VIEW v_merchant_metrics AS
+SELECT
+    m.id AS merchant_id,
+    m.name AS merchant_name,
+    m.sector,
+    m.under_review,
+    (SELECT COUNT(*) FROM loans l WHERE l.merchant_id = m.id) AS loans_total,
+    (SELECT COUNT(*) FROM loans l WHERE l.merchant_id = m.id AND l.status = 'overdue')
+        AS loans_overdue,
+    (SELECT COUNT(*) FROM loans l WHERE l.merchant_id = m.id AND l.status = 'charged_off')
+        AS loans_charged_off,
+    (SELECT COUNT(*) FROM loans l WHERE l.merchant_id = m.id AND l.status = 'in_plan')
+        AS loans_in_plan,
+    (SELECT COALESCE(SUM(c.amount_overdue), 0) FROM cases c JOIN loans l ON l.id = c.loan_id
+        WHERE l.merchant_id = m.id) AS amount_overdue,
+    (SELECT COUNT(*) FROM cases c JOIN loans l ON l.id = c.loan_id
+        WHERE l.merchant_id = m.id AND c.type = 'dispute') AS open_disputes,
+    (SELECT COUNT(*) FROM cases c JOIN loans l ON l.id = c.loan_id
+        WHERE l.merchant_id = m.id AND c.risk_flags LIKE '%fraud_flag%') AS fraud_flags,
+    (SELECT COUNT(*) FROM exceptions e JOIN cases c ON c.id = e.case_id
+        JOIN loans l ON l.id = c.loan_id
+        WHERE l.merchant_id = m.id AND e.kind = 'HOLD') AS exceptions_held,
+    (SELECT COUNT(*) FROM exceptions e JOIN cases c ON c.id = e.case_id
+        JOIN loans l ON l.id = c.loan_id
+        WHERE l.merchant_id = m.id AND e.kind = 'BLOCK') AS exceptions_blocked
+FROM merchants m;

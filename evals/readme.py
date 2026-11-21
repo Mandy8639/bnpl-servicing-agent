@@ -23,6 +23,7 @@ from bnpl.mandate import (
     MAX_AUTO_ACTION_RATE,
     MAX_CONSECUTIVE_BLOCKS,
     MAX_OFFER_PLAN_RATE,
+    REPORT_MANDATE,
     REVIEW_SLA,
 )
 from evals.report import headline
@@ -32,9 +33,10 @@ README = ROOT / "README.md"
 REPORTS = ROOT / "evals" / "reports"
 
 
-def _reports() -> list[tuple[str, dict[str, Any]]]:
+def _reports(suite: str = "servicing") -> list[tuple[str, dict[str, Any]]]:
     loaded = [(p.name, json.loads(p.read_text())) for p in REPORTS.glob("*.json")]
-    return sorted(loaded, key=lambda item: (item[1]["started_at"], item[0]))
+    picked = [(n, r) for n, r in loaded if r.get("suite", "servicing") == suite]
+    return sorted(picked, key=lambda item: (item[1]["started_at"], item[0]))
 
 
 def numbers_block() -> str:
@@ -95,7 +97,35 @@ def mandate_block() -> str:
     return "\n".join(lines)
 
 
-BLOCKS = {"numbers": numbers_block, "history": history_block, "mandate": mandate_block}
+def merchant_block() -> str:
+    lines = [
+        "| Report | Mode | Risk accuracy | Action accuracy | False-publish | Controls "
+        "| Grounding blocks | Gate |",
+        "|---|---|---|---|---|---|---|---|",
+    ]
+    for name, r in _reports("merchant"):
+        m = r["metrics"]
+        lines.append(
+            f"| [`{name}`](evals/reports/{name}) | {r['mode']} | {m['risk_accuracy']:.1%} "
+            f"| {m['action_accuracy']:.1%} ({m['action_correct']}/{m['model_written_reports']}) "
+            f"| {m['false_publish_count']} | {m['control_detection_rate']:.0%} "
+            f"({m['control_cases']}) | {m['grounding_blocks']} "
+            f"| {'pass' if m['gate_passed'] else '**fail**'} |"
+        )
+    lines += ["", "| Action | Meaning | Risk | Handling |", "|---|---|---|---|"]
+    lines += [
+        f"| `{r.action.value}` | {r.meaning} | {r.risk.value} | {r.handling} |"
+        for r in REPORT_MANDATE
+    ]
+    return "\n".join(lines)
+
+
+BLOCKS = {
+    "numbers": numbers_block,
+    "history": history_block,
+    "mandate": mandate_block,
+    "merchant": merchant_block,
+}
 
 
 def render(text: str) -> str:

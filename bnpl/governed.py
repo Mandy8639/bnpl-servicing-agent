@@ -23,7 +23,7 @@ from typing import Any
 from bnpl.ledger.db import connect
 
 FRESHNESS_MAX_AGE = timedelta(hours=24)
-APPEND_ONLY_TABLES = frozenset({"decisions", "exceptions"})
+APPEND_ONLY_TABLES = frozenset({"decisions", "exceptions", "merchant_reports"})
 _ALLOWED_ACTIONS = frozenset(
     {sqlite3.SQLITE_SELECT, sqlite3.SQLITE_FUNCTION, sqlite3.SQLITE_TRANSACTION}
 )
@@ -239,6 +239,55 @@ class GovernedLedger:
     def exceptions(self) -> list[ExceptionRecord]:
         rows = self._query("SELECT * FROM v_exceptions ORDER BY id")
         return [ExceptionRecord(**dict(r)) for r in rows]
+
+    def meta(self, key: str) -> str | None:
+        rows = self._query("SELECT value FROM v_ledger_meta WHERE key = ?", (key,))
+        return rows[0]["value"] if rows else None
+
+    def merchant_metrics(self, merchant_id: str) -> dict[str, Any] | None:
+        rows = self._query("SELECT * FROM v_merchant_metrics WHERE merchant_id = ?", (merchant_id,))
+        return dict(rows[0]) if rows else None
+
+    def merchant_reports(self) -> list[dict[str, Any]]:
+        return [dict(r) for r in self._query("SELECT * FROM v_merchant_reports ORDER BY id")]
+
+    def record_report(
+        self,
+        *,
+        merchant_id: str,
+        period_end: str,
+        risk_level: str | None,
+        recommended_action: str | None,
+        body: str,
+        verdict: str,
+        reason_code: str,
+        status: str,
+        actor: str,
+        reason: str = "",
+        supersedes: int | None = None,
+    ) -> int:
+        """Append one merchant report (or a human decision on one) and return its id."""
+        with self._append() as conn:
+            cursor = conn.execute(
+                "INSERT INTO merchant_reports (merchant_id, period_end, risk_level, "
+                "recommended_action, body, verdict, reason_code, status, actor, reason, "
+                "supersedes, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (
+                    merchant_id,
+                    period_end,
+                    risk_level,
+                    recommended_action,
+                    body,
+                    verdict,
+                    reason_code,
+                    status,
+                    actor,
+                    reason,
+                    supersedes,
+                    self._clock().isoformat(timespec="seconds"),
+                ),
+            )
+        return int(cursor.lastrowid or 0)
 
     def record_decision(
         self,

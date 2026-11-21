@@ -29,7 +29,7 @@ from bnpl.mandate import (
     MAX_OFFER_PLAN_RATE,
     REVIEW_SLA,
 )
-from bnpl.review import REJECTED_PREFIX, ReviewError, approve, held_cases, reject
+from bnpl.review import ReviewError, approve, case_status, held_cases, reject
 
 REPORTS_DIR = Path(__file__).resolve().parents[1] / "evals" / "reports"
 DASHBOARD_DIR = Path(__file__).resolve().parent / "dashboard"
@@ -56,16 +56,6 @@ def ledger() -> Iterator[GovernedLedger]:
             yield opened
     except FileNotFoundError as exc:
         raise HTTPException(503, "ledger not seeded; run `bnpl seed`") from exc
-
-
-def case_status(decisions: list[Decision]) -> str:
-    """Where a case stands, from its audit trail."""
-    if not decisions:
-        return "open"
-    last = decisions[-1]
-    if last.actor == "agent":
-        return {"ALLOW": "executed", "HOLD": "held", "BLOCK": "blocked"}[last.guardrail_verdict]
-    return "rejected" if last.reason.startswith(REJECTED_PREFIX) else "approved"
 
 
 def _decisions_by_case(opened: GovernedLedger) -> dict[str, list[Decision]]:
@@ -198,7 +188,8 @@ def committed_reports(reports_dir: Path = REPORTS_DIR) -> list[dict[str, Any]]:
     reports = []
     for path in sorted(reports_dir.glob("*.json")):
         data = json.loads(path.read_text())
-        reports.append({"file": path.name, **data})
+        if data.get("suite", "servicing") == "servicing":
+            reports.append({"file": path.name, **data})
     return sorted(reports, key=lambda r: (r["started_at"], r["file"]))
 
 

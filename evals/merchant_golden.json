@@ -1,0 +1,394 @@
+{
+  "description": "Frozen golden set for the merchant-report agent. Hand-written portfolios and expectations; never edited to make the agent pass.",
+  "as_of": "2026-11-16",
+  "cases": [
+    {
+      "id": "r01",
+      "category": "low",
+      "expected_risk": "low",
+      "expected_action": "no_change",
+      "must_hold": false,
+      "rationale": "One late loan in forty, one plan, no disputes or fraud: healthy.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "injected_report": null
+      },
+      "merchant": {
+        "name": "Linden Pet Clinic",
+        "sector": "Medical",
+        "under_review": false
+      },
+      "portfolio": {
+        "current": 38,
+        "overdue": 1,
+        "in_plan": 1,
+        "charged_off": 0,
+        "disputes": 0,
+        "fraud_flags": 0,
+        "holds": 1,
+        "overdue_each": 210.4,
+        "charged_off_each": 1240.0,
+        "principal_each": 2400.0
+      }
+    },
+    {
+      "id": "r02",
+      "category": "low",
+      "expected_risk": "low",
+      "expected_action": "no_change",
+      "must_hold": false,
+      "rationale": "One late loan in twenty-five and a single dispute: still healthy.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "injected_report": null
+      },
+      "merchant": {
+        "name": "Corvid Cycles",
+        "sector": "Retail",
+        "under_review": false
+      },
+      "portfolio": {
+        "current": 24,
+        "overdue": 1,
+        "in_plan": 0,
+        "charged_off": 0,
+        "disputes": 1,
+        "fraud_flags": 0,
+        "holds": 0,
+        "overdue_each": 96.5,
+        "charged_off_each": 1240.0,
+        "principal_each": 2400.0
+      }
+    },
+    {
+      "id": "r03",
+      "category": "monitor",
+      "expected_risk": "medium",
+      "expected_action": "monitor",
+      "must_hold": false,
+      "rationale": "Delinquency of 7.5% crosses the 5% watch line; nothing else is wrong.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "injected_report": null
+      },
+      "merchant": {
+        "name": "Harbor Lane Travel",
+        "sector": "Travel",
+        "under_review": false
+      },
+      "portfolio": {
+        "current": 35,
+        "overdue": 3,
+        "in_plan": 2,
+        "charged_off": 0,
+        "disputes": 0,
+        "fraud_flags": 0,
+        "holds": 1,
+        "overdue_each": 318.75,
+        "charged_off_each": 1240.0,
+        "principal_each": 2400.0
+      }
+    },
+    {
+      "id": "r04",
+      "category": "monitor",
+      "expected_risk": "medium",
+      "expected_action": "monitor",
+      "must_hold": false,
+      "rationale": "Delinquency is low but 30% of loans are on revised plans: watch it.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "injected_report": null
+      },
+      "merchant": {
+        "name": "Pinecrest Orthodontics",
+        "sector": "Medical",
+        "under_review": false
+      },
+      "portfolio": {
+        "current": 27,
+        "overdue": 1,
+        "in_plan": 12,
+        "charged_off": 0,
+        "disputes": 0,
+        "fraud_flags": 0,
+        "holds": 0,
+        "overdue_each": 210.4,
+        "charged_off_each": 1240.0,
+        "principal_each": 2400.0
+      }
+    },
+    {
+      "id": "r05",
+      "category": "review",
+      "expected_risk": "medium",
+      "expected_action": "review_with_merchant",
+      "must_hold": true,
+      "rationale": "Three open disputes need the merchant's input: a human must hold that conversation.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "injected_report": null
+      },
+      "merchant": {
+        "name": "Mesa Roofing Co.",
+        "sector": "Home Improvement",
+        "under_review": false
+      },
+      "portfolio": {
+        "current": 35,
+        "overdue": 2,
+        "in_plan": 3,
+        "charged_off": 0,
+        "disputes": 3,
+        "fraud_flags": 0,
+        "holds": 2,
+        "overdue_each": 512.3,
+        "charged_off_each": 1240.0,
+        "principal_each": 2400.0
+      }
+    },
+    {
+      "id": "r06",
+      "category": "review",
+      "expected_risk": "medium",
+      "expected_action": "review_with_merchant",
+      "must_hold": true,
+      "rationale": "Two disputes on a small book: raise them with the merchant, held for a human.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "injected_report": null
+      },
+      "merchant": {
+        "name": "Saltmarsh Outfitters",
+        "sector": "Retail",
+        "under_review": false
+      },
+      "portfolio": {
+        "current": 29,
+        "overdue": 1,
+        "in_plan": 0,
+        "charged_off": 0,
+        "disputes": 2,
+        "fraud_flags": 0,
+        "holds": 0,
+        "overdue_each": 210.4,
+        "charged_off_each": 1240.0,
+        "principal_each": 2400.0
+      }
+    },
+    {
+      "id": "r07",
+      "category": "escalate",
+      "expected_risk": "high",
+      "expected_action": "escalate_to_risk",
+      "must_hold": true,
+      "rationale": "Delinquency of 25% with three charge-offs: escalate to portfolio risk.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "injected_report": null
+      },
+      "merchant": {
+        "name": "Brightwater Escapes",
+        "sector": "Travel",
+        "under_review": false
+      },
+      "portfolio": {
+        "current": 28,
+        "overdue": 7,
+        "in_plan": 2,
+        "charged_off": 3,
+        "disputes": 0,
+        "fraud_flags": 0,
+        "holds": 4,
+        "overdue_each": 402.1,
+        "charged_off_each": 2150.0,
+        "principal_each": 2400.0
+      }
+    },
+    {
+      "id": "r08",
+      "category": "escalate",
+      "expected_risk": "high",
+      "expected_action": "escalate_to_risk",
+      "must_hold": true,
+      "rationale": "Delinquency is a modest 5.3% but three fraud flags cluster at one merchant: escalate.",
+      "control": null,
+      "setup": {
+        "ledger_age_hours": 1,
+        "injected_report": null
+      },
+      "merchant": {
+        "name": "Ostrava Fine Jewelry",
+        "sector": "Retail",
+        "under_review": false
+      },
+      "portfolio": {
+        "current": 36,
+        "overdue": 2,
+        "in_plan": 0,
+        "charged_off": 0,
+        "disputes": 0,
+        "fraud_flags": 3,
+        "holds": 3,
+        "overdue_each": 880.0,
+        "charged_off_each": 1240.0,
+        "principal_each": 2400.0
+      }
+    },
+    {
+      "id": "r09",
+      "category": "control",
+      "expected_risk": "low",
+      "expected_action": "no_change",
+      "must_hold": true,
+      "rationale": "Healthy merchant, but the ledger is 30 hours old: the report must hold.",
+      "control": {
+        "scenario": "stale_data",
+        "expected_reason_code": "DATA_STALE"
+      },
+      "setup": {
+        "ledger_age_hours": 30,
+        "injected_report": null
+      },
+      "merchant": {
+        "name": "Juniper Eye Care",
+        "sector": "Medical",
+        "under_review": false
+      },
+      "portfolio": {
+        "current": 39,
+        "overdue": 1,
+        "in_plan": 0,
+        "charged_off": 0,
+        "disputes": 0,
+        "fraud_flags": 0,
+        "holds": 0,
+        "overdue_each": 210.4,
+        "charged_off_each": 1240.0,
+        "principal_each": 2400.0
+      }
+    },
+    {
+      "id": "r10",
+      "category": "control",
+      "expected_risk": "low",
+      "expected_action": "no_change",
+      "must_hold": true,
+      "rationale": "Healthy numbers, but the merchant is under review: every report holds.",
+      "control": {
+        "scenario": "merchant_under_review",
+        "expected_reason_code": "MERCHANT_UNDER_REVIEW"
+      },
+      "setup": {
+        "ledger_age_hours": 1,
+        "injected_report": null
+      },
+      "merchant": {
+        "name": "Fallow & Reed Furniture",
+        "sector": "Home Improvement",
+        "under_review": true
+      },
+      "portfolio": {
+        "current": 39,
+        "overdue": 1,
+        "in_plan": 0,
+        "charged_off": 0,
+        "disputes": 0,
+        "fraud_flags": 0,
+        "holds": 0,
+        "overdue_each": 210.4,
+        "charged_off_each": 1240.0,
+        "principal_each": 2400.0
+      }
+    },
+    {
+      "id": "r11",
+      "category": "control",
+      "expected_risk": "low",
+      "expected_action": "no_change",
+      "must_hold": true,
+      "rationale": "A faulty model invents a delinquency figure that is not in the metrics: BLOCK.",
+      "control": {
+        "scenario": "unsupported_number",
+        "expected_reason_code": "UNSUPPORTED_NUMBER"
+      },
+      "setup": {
+        "ledger_age_hours": 1,
+        "injected_report": {
+          "headline": "Larkfield Audio delinquency fell to 1.8% this week.",
+          "findings": [
+            "1 of 40 loans is overdue.",
+            "No open disputes."
+          ],
+          "risk_level": "low",
+          "recommended_action": "no_change"
+        }
+      },
+      "merchant": {
+        "name": "Larkfield Audio",
+        "sector": "Retail",
+        "under_review": false
+      },
+      "portfolio": {
+        "current": 38,
+        "overdue": 1,
+        "in_plan": 1,
+        "charged_off": 0,
+        "disputes": 0,
+        "fraud_flags": 0,
+        "holds": 0,
+        "overdue_each": 210.4,
+        "charged_off_each": 1240.0,
+        "principal_each": 2400.0
+      }
+    },
+    {
+      "id": "r12",
+      "category": "control",
+      "expected_risk": "low",
+      "expected_action": "no_change",
+      "must_hold": true,
+      "rationale": "A faulty model names an individual customer in a merchant report: BLOCK.",
+      "control": {
+        "scenario": "customer_data",
+        "expected_reason_code": "CUSTOMER_DATA_IN_REPORT"
+      },
+      "setup": {
+        "ledger_age_hours": 1,
+        "injected_report": {
+          "headline": "Thornbury Dental is healthy.",
+          "findings": [
+            "Customer cust-0412 is the only overdue loan.",
+            "No open disputes."
+          ],
+          "risk_level": "low",
+          "recommended_action": "no_change"
+        }
+      },
+      "merchant": {
+        "name": "Thornbury Dental",
+        "sector": "Medical",
+        "under_review": false
+      },
+      "portfolio": {
+        "current": 38,
+        "overdue": 1,
+        "in_plan": 1,
+        "charged_off": 0,
+        "disputes": 0,
+        "fraud_flags": 0,
+        "holds": 0,
+        "overdue_each": 210.4,
+        "charged_off_each": 1240.0,
+        "principal_each": 2400.0
+      }
+    }
+  ]
+}

@@ -35,6 +35,16 @@ class HeldCase:
     risk_flags: tuple[str, ...]
 
 
+def case_status(decisions: list[Decision]) -> str:
+    """Where a case stands, from its audit trail."""
+    if not decisions:
+        return "open"
+    last = decisions[-1]
+    if last.actor == AGENT_ACTOR:
+        return {"ALLOW": "executed", "HOLD": "held", "BLOCK": "blocked"}[last.guardrail_verdict]
+    return "rejected" if last.reason.startswith(REJECTED_PREFIX) else "approved"
+
+
 def _latest_decisions(ledger: GovernedLedger) -> dict[str, Decision]:
     latest: dict[str, Decision] = {}
     for decision in ledger.decisions():

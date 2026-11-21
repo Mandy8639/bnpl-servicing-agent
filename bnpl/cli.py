@@ -12,6 +12,8 @@ bnpl serve [--port]                         API + dashboard
 """
 
 import argparse
+import json
+import os
 import sys
 from collections.abc import Callable
 from pathlib import Path
@@ -138,6 +140,74 @@ def cmd_serve(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_mcp(_: argparse.Namespace) -> int:
+    from bnpl.mcp_server import main as mcp_main
+
+    mcp_main()
+    return 0
+
+
+def cmd_report_draft(ledger: GovernedLedger, args: argparse.Namespace) -> int:
+    from bnpl.merchant_report import ClaudeReportWriter, RecordedReportWriter, run_report
+    from bnpl.proposers import DEFAULT_MODEL, Cassette, SpendLedger
+
+    if args.mode == "live":
+        cap = float(os.environ.get("BNPL_DAILY_SPEND_CAP_USD", "1.00"))
+        spend = SpendLedger(Path(os.environ.get("BNPL_SPEND_PATH", "data/spend.json")), cap)
+        writer = ClaudeReportWriter(spend=spend, model=os.environ.get("BNPL_MODEL", DEFAULT_MODEL))
+    else:
+        if not args.cassette.exists():
+            print(f"No recorded reports at {args.cassette}; use --mode live.", file=sys.stderr)
+            return 2
+        writer = RecordedReportWriter(Cassette.load(args.cassette))
+    try:
+        outcome = run_report(ledger, args.merchant_id, writer)
+    except LookupError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+    print(f"{outcome.merchant_id}: {outcome.status.upper()} · {outcome.verdict.reason_code}")
+    print(f"  {outcome.draft.headline}")
+    for finding in outcome.draft.findings:
+        print(f"  - {finding}")
+    print(f"  risk {outcome.draft.risk_level} · action {outcome.draft.recommended_action}")
+    print(_color(f"  {outcome.verdict.detail} · cost ${outcome.cost_usd:.4f}", DIM))
+    return 0
+
+
+def cmd_report_list(ledger: GovernedLedger, _: argparse.Namespace) -> int:
+    from bnpl.merchant_report import held_reports
+
+    held = held_reports(ledger)
+    if not held:
+        print("No merchant reports waiting on a human.")
+    for r in held:
+        body = json.loads(r["body"])
+        print(
+            f"report {r['id']}  {r['merchant_id']}  {r['reason_code']}  ({r['recommended_action']})"
+        )
+        print(f"  {body['headline']}")
+    return 0
+
+
+def cmd_report_decide(ledger: GovernedLedger, args: argparse.Namespace) -> int:
+    from bnpl.merchant_report import decide_report
+
+    try:
+        decide_report(
+            ledger,
+            args.report_id,
+            approve=args.decision == "approve",
+            actor=args.actor,
+            reason=args.reason,
+        )
+    except ValueError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+    past = {"approve": "approved and published", "reject": "rejected"}[args.decision]
+    print(f"report {args.report_id}: {past} by {args.actor}.")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="bnpl", description=__doc__.split("\n\n")[0])
     parser.add_argument("--db", type=Path, default=db_path(), help="ledger path")
@@ -188,6 +258,26 @@ def build_parser() -> argparse.ArgumentParser:
     serve.add_argument("--host", default="127.0.0.1")
     serve.add_argument("--port", type=int, default=8000)
     serve.set_defaults(func=cmd_serve)
+
+    report = sub.add_parser("report", help="merchant portfolio reports").add_subparsers(
+        dest="report_command", required=True
+    )
+    draft = report.add_parser("draft", help="write one merchant's weekly report")
+    draft.add_argument("merchant_id")
+    draft.add_argument("--mode", choices=["stub", "live"], default="live")
+    draft.add_argument("--cassette", type=Path, default=Path("cassettes/merchant-ledger.json"))
+    draft.set_defaults(func=_with_ledger(cmd_report_draft))
+    report.add_parser("list", help="held reports").set_defaults(func=_with_ledger(cmd_report_list))
+    for decision in ("approve", "reject"):
+        p = report.add_parser(decision, help=f"{decision} a held report")
+        p.add_argument("report_id", type=int)
+        p.add_argument("--actor", required=True)
+        p.add_argument("--reason", required=True)
+        p.set_defaults(func=_with_ledger(cmd_report_decide), decision=decision)
+
+    sub.add_parser("mcp", help="the agent's tools as an MCP server on stdio").set_defaults(
+        func=cmd_mcp
+    )
     return parser
 
 
