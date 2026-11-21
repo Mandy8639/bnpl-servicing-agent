@@ -152,6 +152,13 @@ as it ran.
 through the same governed ledger, guardrail, pause conditions and review queue as the
 built-in agent, so it cannot execute anything the guardrail would hold or block.
 
+## How it was built
+
+From a written spec, phase by phase, with an AI coding agent and a human review between
+phases. Each phase had a check that had to pass before the next began. The spec, and a
+record of every place the build departed from it, is in
+[docs/build-spec.md](docs/build-spec.md).
+
 ## Project layout
 
 ```
