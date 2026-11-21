@@ -31,17 +31,16 @@ from typing import TypedDict
 from langgraph.graph import END, START, StateGraph
 
 from bnpl.config import db_path
-from bnpl.controls import PauseState, pause_state
+from bnpl.controls import PauseState, pause_state, recent_agent_decisions
 from bnpl.governed import Case, GovernedLedger, Payment, utc_now
 from bnpl.guardrail import (
     GuardrailContext,
     GuardrailResult,
     PauseScope,
-    RecentDecision,
     Verdict,
     evaluate,
 )
-from bnpl.mandate import CONTROL_WINDOW
+from bnpl.mandate import AGENT_ACTOR
 from bnpl.proposers import (
     Cassette,
     Proposer,
@@ -50,7 +49,6 @@ from bnpl.proposers import (
     live_proposer_from_env,
 )
 
-AGENT_ACTOR = "agent"
 SAMPLE_CASSETTE = Path("cassettes/ledger-sample.json")
 
 log = logging.getLogger("bnpl.agent")
@@ -161,11 +159,7 @@ class ServicingAgent:
             return {"outcome": CaseOutcome(case_id=case_id, status=Status.SKIPPED_PAUSED)}
 
         now = self._clock()
-        recent = [
-            RecentDecision(d.proposed_action, Verdict(d.guardrail_verdict))
-            for d in self._ledger.decisions()
-            if d.actor == AGENT_ACTOR and d.id > pause.window_starts_after_decision
-        ][-CONTROL_WINDOW:]
+        recent = recent_agent_decisions(self._ledger, pause)
         context = GuardrailContext(
             case_id=case_id,
             customer_ref=case.customer_ref,
@@ -227,7 +221,9 @@ class ServicingAgent:
                     "rationale": proposal.rationale,
                     "guardrail_detail": result.detail,
                     "escalation_owner": result.escalation_owner,
-                    "decide_by": result.decide_by.isoformat() if result.decide_by else None,
+                    "decide_by": (
+                        result.decide_by.isoformat(timespec="seconds") if result.decide_by else None
+                    ),
                 }
             ),
         )

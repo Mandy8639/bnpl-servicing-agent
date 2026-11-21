@@ -32,6 +32,7 @@ class ActionRule:
     handling: str
 
 
+AGENT_ACTOR = "agent"
 ESCALATION_OWNER = "servicing lead"
 REVIEW_SLA = timedelta(hours=24)
 

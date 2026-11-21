@@ -149,13 +149,20 @@ def trailing_blocks(decisions: Sequence[RecentDecision]) -> int:
 
 
 def detect_pause_conditions(ctx: GuardrailContext) -> list[PauseCondition]:
-    """Agent-wide pause conditions that hold right now, in mandate order.
+    """Agent-wide pause conditions that hold right now, in mandate order."""
+    return pause_conditions(data_fresh=ctx.data_fresh, recent_decisions=ctx.recent_decisions)
+
+
+def pause_conditions(
+    *, data_fresh: bool, recent_decisions: Sequence[RecentDecision]
+) -> list[PauseCondition]:
+    """The agent-wide pause checks on their own, so detective controls can run them too.
 
     Rate controls look at the last ``CONTROL_WINDOW`` decisions and only fire once
     at least ``CONTROL_MIN_SAMPLE`` exist, so a cold start cannot trip them on one case.
     """
     found: list[PauseCondition] = []
-    if not ctx.data_fresh:
+    if not data_fresh:
         found.append(
             PauseCondition(
                 ReasonCode.DATA_STALE,
@@ -164,7 +171,7 @@ def detect_pause_conditions(ctx: GuardrailContext) -> list[PauseCondition]:
             )
         )
 
-    window = list(ctx.recent_decisions)[-CONTROL_WINDOW:]
+    window = list(recent_decisions)[-CONTROL_WINDOW:]
     if len(window) >= CONTROL_MIN_SAMPLE:
         auto_rate = _rate(window, "auto")
         if auto_rate > MAX_AUTO_ACTION_RATE:
@@ -187,7 +194,7 @@ def detect_pause_conditions(ctx: GuardrailContext) -> list[PauseCondition]:
                 )
             )
 
-    blocks = trailing_blocks(ctx.recent_decisions)
+    blocks = trailing_blocks(recent_decisions)
     if blocks >= MAX_CONSECUTIVE_BLOCKS:
         found.append(
             PauseCondition(
